@@ -14,13 +14,12 @@ export default  App = () => {
   useEffect( async () => {
     const user = await API.graphql(graphqlOperation(gqlQueries.getUser, { id: 'ryotadegozaru917@icloud.com' }))
     console.log(user)
-    setState(user)
+    setData(user)
   })
 
   return (
     <View style={styles.container}>
       <Text>テスト</Text>
-      <Text>{data}</Text>
       <StatusBar style="auto" />
     </View>
   );
