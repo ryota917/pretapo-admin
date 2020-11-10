@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-pretapoadmin-dev-105242-authRole",
+      "UnauthRoleArn": "arn:aws:iam::797806246810:role/amplify-pretapoadmin-dev-105242-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::797806246810:role/amplify-pretapoadmin-dev-105242-authRole",
+      "Region": "ap-northeast-1",
+      "DeploymentBucketName": "amplify-pretapoadmin-dev-105242-deployment",
+      "UnauthRoleName": "amplify-pretapoadmin-dev-105242-unauthRole",
+      "StackName": "amplify-pretapoadmin-dev-105242",
+      "StackId": "arn:aws:cloudformation:ap-northeast-1:797806246810:stack/amplify-pretapoadmin-dev-105242/7b2438d0-22f7-11eb-b738-067396fd8508",
+      "AmplifyAppId": "d2fq7q8nr8y2z"
+    }
+  }
+}

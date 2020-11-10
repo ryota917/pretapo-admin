@@ -4,16 +4,9 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Amplify, API, graphqlOperation } from 'aws-amplify'
 import * as gqlQueries from './graphql/queries' // read
 import * as gqlMutations from './graphql/mutations' // create, update, delete
+import awsmobile from './aws-exports'
 
-const pretapoConfig = {
-  "aws_project_region": "ap-northeast-1",
-  "aws_appsync_graphqlEndpoint": "https://lpysywb5rnamtdmuojjypxxkri.appsync-api.ap-northeast-1.amazonaws.com/graphql",
-  "aws_appsync_region": "ap-northeast-1",
-  "aws_appsync_authenticationType": "API_KEY",
-  "aws_appsync_apiKey": "da2-xgoywjersjefvh6kg5fgy3r6ci",
-}
-
-Amplify.configure(pretapoConfig)
+Amplify.configure(awsmobile)
 
 export default  App = () => {
   const [data, setData] = useState([]);

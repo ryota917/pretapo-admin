@@ -1,5 +1,5 @@
 projects:
-  pretapoadmin:
+  expoAmplifyApi-dev:
     schemaPath: graphql/schema.json
     includes:
       - src/graphql/**/*.js
@@ -10,6 +10,9 @@ projects:
         codeGenTarget: javascript
         generatedFileName: ''
         docsFilePath: graphql
+        region: ap-northeast-1
+        apiId: lrmylqiq45fc5jfxhuilbo5ki4
+        maxDepth: 2
 extensions:
   amplify:
     version: 3
