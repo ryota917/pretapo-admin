@@ -452,6 +452,53 @@ export const searchCartLogs = /* GraphQL */ `
       items {
         id
         userId
+        user {
+          id
+          name
+          nameKana
+          phoneNumber
+          address
+          postalCode
+        }
+        itemCartLogs {
+          items {
+            id
+            itemId
+            item {
+              id
+              name
+              description
+              stateDescription
+              imageURLs
+              status
+              season
+              bigCategory
+              smallCategory
+              color
+              dressLength
+              dressWidth
+              sleeveLength
+              size
+              brand
+              supplierName
+              material
+              rank
+              favoriteUser {
+                items {
+                  id
+                  itemId
+                  userId
+                  createdAt
+                  updatedAt
+                }
+                nextToken
+              }
+            }
+            cartLogId
+            createdAt
+            updatedAt
+          }
+        }
         createdAt
         updatedAt
       }
