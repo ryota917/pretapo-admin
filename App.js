@@ -11,6 +11,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import SearchItem from './screens/ItemTab/SearchItem'
 import ItemDetail from './screens/ItemTab/ItemDetail'
 
+//import ImageTab
+import SearchItemImage from './screens/ImageTab/SearchItemImage'
+
 //import OrderTab
 import OrderItem from './screens/OrderTab/OrderItem'
 import OrderList from './screens/OrderTab/OrderList'
@@ -27,6 +30,12 @@ const ItemTabStack = createStackNavigator(
   }
 )
 
+const ImageTabStack = createStackNavigator(
+  {
+    SearchItemImage: { screen: SearchItemImage },
+  }
+)
+
 const OrderTabStack = createStackNavigator(
   {
     OrderItem: { screen: OrderItem },
@@ -40,6 +49,12 @@ const Tab = createBottomTabNavigator(
       screen: ItemTabStack,
       navigationOptions: {
         tabBarIcon: ({ tintColor }) => <Icon size={24} name='search' color={tintColor} />
+      }
+    },
+    '画像投稿': {
+      screen: ImageTabStack,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => <Icon size={24} name='camera' color={tintColor} />
       }
     },
     '注文リスト': {
