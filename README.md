@@ -32,4 +32,4 @@ react-native run-ios # シミュレーターが立ち上がる
 
 [can’t find gem cocoapods (>= 0.a) with executable pod (Gem::GemNotFoundException)](https://csiandal.medium.com/cant-find-gem-cocoapods-0-a-with-executable-pod-gem-gemnotfoundexception-94aa6dc8b630)  
 [React Native「No bundle URL present」エラー対策集](https://qiita.com/wktq/items/9139f4c0bdf52bd71c93)  
-[捜査ログ](https://pretapo.slack.com/archives/C01EXJ24PCL/p1605418387000700)  
+[操作ログ](https://pretapo.slack.com/archives/C01EXJ24PCL/p1605418387000700)  
