@@ -20,9 +20,17 @@ $ cd pretapo-admin
 $ cd ios
 $ pod install
 $ cd ..
-$ react-native start # ログが流れる
-# 別のタブで
-react-native run-ios # シミュレーターが立ち上がる
+```
+Xcodeを起動する  
+
+以下コマンドでRNを起動、ログが流れる  
+```
+$ react-native start
+```
+
+別のタブでシミュレータを起動する
+```
+$ react-native run-ios
 ```
 
 ## トラブルシューティング
