@@ -5,6 +5,8 @@ pretapoの管理ツールです。
 
 ## expoについて
 
+※`expo eject` は11/19日現在していない。
+
 当アプリは、`expo eject` されている。
 `expo eject`及び実行方法については以下を参照。
 
