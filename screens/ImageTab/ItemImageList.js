@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {Dimensions, Image, View, SafeAreaView} from 'react-native'
+import {Dimensions, Image, View, SafeAreaView, Button} from 'react-native'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import AutoDragSortableView from '../../widget/AutoDragSortableView'
 
@@ -38,6 +38,11 @@ const ItemImageList = ({navigation}) => {
                 renderItem={(imageURLs,index)=>{
                     return renderItem(imageURLs,index)
                 }}
+            />
+            <Button
+                onPress={() => navigation.navigate('ItemImageDetail', {item: navigation.state.params.item})}
+                title='プレビュー'
+                color='blue'
             />
         </SafeAreaView>
     )

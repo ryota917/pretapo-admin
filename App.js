@@ -14,6 +14,7 @@ import ItemDetail from './screens/ItemTab/ItemDetail'
 //import ImageTab
 import SearchItemImage from './screens/ImageTab/SearchItemImage'
 import ItemImageList from './screens/ImageTab/ItemImageList'
+import ItemImageDetail from './screens/ImageTab/ItemImageDetail'
 
 //import OrderTab
 import OrderItem from './screens/OrderTab/OrderItem'
@@ -37,6 +38,7 @@ const ImageTabStack = createStackNavigator(
     SearchItemImage: { screen: SearchItemImage },
     ItemImageList: { screen: ItemImageList },
     TakeItemImage: { screen: TakeItemImage },
+    ItemImageDetail: { screen: ItemImageDetail },
   }
 )
 
