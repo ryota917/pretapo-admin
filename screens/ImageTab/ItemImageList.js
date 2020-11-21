@@ -1,7 +1,8 @@
-import React, {useEffect} from 'react'
-import {Dimensions, Image, View, SafeAreaView, Button} from 'react-native'
+import React, {useEffect, useState} from 'react'
+import {Dimensions, Image, View, SafeAreaView, Button, Platform} from 'react-native'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import AutoDragSortableView from '../../widget/AutoDragSortableView'
+import * as ImagePicker from 'expo-image-picker'
 
 const {width} = Dimensions.get('window')
 
@@ -10,7 +11,6 @@ const childrenWidth = width/3 - 20
 const childrenHeight = 48*4
 
 const ItemImageList = ({navigation}) => {
-
     const imageURLs = navigation.state.params.item.imageURLs;
     // 1からはじまる
     const imageURLsIndex = {};
@@ -22,6 +22,19 @@ const ItemImageList = ({navigation}) => {
         console.log(imageURLsIndex)
     }, [])
 
+    const [newImage, setNewImage] = useState(null);
+
+    useEffect(() => {
+        (async () => {
+          if (Platform.OS !== 'web') {
+            const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
+            if (status !== 'granted') {
+              alert('Sorry, we need camera roll permissions to make this work!');
+            }
+          }
+        })();
+      }, []);
+
     const renderItem = (imageURLs,index) => {
         return (
             <View>
@@ -29,6 +42,21 @@ const ItemImageList = ({navigation}) => {
             </View>
         )
     }
+
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+  
+        console.log(result);
+
+        if (!result.cancelled) {
+          setNewImage(result.uri);
+        }
+    };
 
     return (
         <SafeAreaView style={{flex: 1}}>
@@ -70,11 +98,13 @@ const ItemImageList = ({navigation}) => {
                     console.log(imageURLsIndex)
                 }}
             />
+            <Button title="写真を投稿する" onPress={pickImage} />
             <Button
                 onPress={() => navigation.navigate('ItemImageDetail', {item: navigation.state.params.item})}
                 title='プレビュー'
                 color='blue'
             />
+            {/* {newImage && <Image source={{ uri: newImage }} style={{ width: 200, height: 200 }} />} */}
         </SafeAreaView>
     )
 }

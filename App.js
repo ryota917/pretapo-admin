@@ -37,8 +37,9 @@ const ImageTabStack = createStackNavigator(
   {
     SearchItemImage: { screen: SearchItemImage },
     ItemImageList: { screen: ItemImageList },
-    TakeItemImage: { screen: TakeItemImage },
     ItemImageDetail: { screen: ItemImageDetail },
+    // 使っていない
+    TakeItemImage: { screen: TakeItemImage },
   }
 )
 

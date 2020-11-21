@@ -14,13 +14,8 @@ const SearchItemImage = ({ navigation }) => {
             const res = await API.graphql(graphqlOperation(gqlQueries.getItem, { id: searchId }))
             const item = res.data.getItem
             if(item) {
-                if(item.imageURLs.length != 0) {
-                    navigation.navigate('ItemImageList', { item: item })
-                    console.log(item.imageURLs)
-                } else {
-                    navigation.navigate('TakeItemImage', { item: item })
-                    console.log(item)
-                }
+                navigation.navigate('ItemImageList', { item: item })
+                console.log(item.imageURLs)
             } else {
                 setAlertVisible(true)
                 setTimeout(() => setAlertVisible(false), 3000)
