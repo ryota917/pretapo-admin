@@ -11,18 +11,18 @@ const childrenWidth = width/3 - 20
 const childrenHeight = 48*4
 
 const ItemImageList = ({navigation}) => {
-    const imageURLs = navigation.state.params.item.imageURLs;
+    const [imageURLs, setImageURLs] = useState(navigation.state.params.item.imageURLs);
     // 1からはじまる
     const imageURLsIndex = {};
+
+    const [newImage, setNewImage] = useState(null);
 
     useEffect(() => {
         imageURLs.forEach((imageURL, i) => {
             imageURLsIndex[i+1] = imageURL
         })
         console.log(imageURLsIndex)
-    }, [])
-
-    const [newImage, setNewImage] = useState(null);
+    }, [newImage])
 
     useEffect(() => {
         (async () => {
@@ -52,6 +52,11 @@ const ItemImageList = ({navigation}) => {
         });
   
         console.log(result);
+
+        setImageURLs([...imageURLs, result.uri])
+
+        const imageCounts = imageURLs.length
+        imageURLsIndex[imageCounts] = result.uri
 
         if (!result.cancelled) {
           setNewImage(result.uri);
@@ -104,7 +109,6 @@ const ItemImageList = ({navigation}) => {
                 title='プレビュー'
                 color='blue'
             />
-            {/* {newImage && <Image source={{ uri: newImage }} style={{ width: 200, height: 200 }} />} */}
         </SafeAreaView>
     )
 }
