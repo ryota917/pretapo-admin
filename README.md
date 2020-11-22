@@ -19,6 +19,7 @@ pretapoの管理ツールです。
 ```
 $ git clone git@github.com:ryota917/pretapo-admin.git
 $ cd pretapo-admin
+$ npm i
 $ cd ios
 $ pod install
 $ cd ..
