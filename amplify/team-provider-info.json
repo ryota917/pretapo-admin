@@ -10,6 +10,11 @@
       "StackName": "amplify-pretapoadmin-dev-105242",
       "StackId": "arn:aws:cloudformation:ap-northeast-1:797806246810:stack/amplify-pretapoadmin-dev-105242/7b2438d0-22f7-11eb-b738-067396fd8508",
       "AmplifyAppId": "d2fq7q8nr8y2z"
+    },
+    "categories": {
+      "auth": {
+        "pretapoadmin600fb63a": {}
+      }
     }
   }
 }
