@@ -123,7 +123,7 @@ export default class ItemDetail extends React.Component {
                             <TextInput
                                 style={styles.dataInput}
                                 onChangeText={(season) => this.onChangeData('season', season)}
-                                placeholder={prevItem.season}
+                                placeholder={prevItem.season[0]}
                             />
                         </View>
                         <View style={styles.dataView}>
@@ -141,7 +141,7 @@ export default class ItemDetail extends React.Component {
                             <TextInput
                                 style={styles.dataInput}
                                 onChangeText={(color) => this.onChangeData('color', color)}
-                                placeholder={prevItem.color}
+                                placeholder={prevItem.color[0]}
                             />
                         </View>
                         <View style={styles.dataView}>
@@ -149,7 +149,7 @@ export default class ItemDetail extends React.Component {
                             <TextInput
                                 style={styles.dataInput}
                                 onChangeText={(material) => this.onChangeData('material', material)}
-                                placeholder={prevItem.material}
+                                placeholder={prevItem.material[0]}
                             />
                         </View>
                     </View>
@@ -159,7 +159,7 @@ export default class ItemDetail extends React.Component {
                             <TextInput
                                 style={styles.dataInput}
                                 onChangeText={(bigCategory) => this.onChangeData('bigCategory', bigCategory)}
-                                placeholder={prevItem.bigCategory}
+                                placeholder={prevItem.bigCategory[0]}
                             />
                         </View>
                         <View style={styles.dataView}>
@@ -167,7 +167,7 @@ export default class ItemDetail extends React.Component {
                             <TextInput
                                 style={styles.dataInput}
                                 onChangeText={(smallCategory) => this.onChangeData('smallCategory', smallCategory)}
-                                placeholder={prevItem.smallCategory}
+                                placeholder={prevItem.smallCategory[0]}
                             />
                         </View>
                     </View>
