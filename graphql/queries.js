@@ -17,6 +17,11 @@ export const getItem = /* GraphQL */ `
       dressLength
       dressWidth
       sleeveLength
+      waist
+      hip
+      rise
+      inseam
+      hemWidth
       size
       brand
       supplierName
@@ -57,6 +62,11 @@ export const listItems = /* GraphQL */ `
         dressLength
         dressWidth
         sleeveLength
+        waist
+        hip
+        rise
+        inseam
+        hemWidth
         size
         brand
         supplierName
@@ -216,6 +226,37 @@ export const listCartLogs = /* GraphQL */ `
     }
   }
 `;
+export const getMessage = /* GraphQL */ `
+  query GetMessage($id: ID!) {
+    getMessage(id: $id) {
+      id
+      text
+      room
+      user
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listMessages = /* GraphQL */ `
+  query ListMessages(
+    $filter: ModelMessageFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listMessages(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        text
+        room
+        user
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const getItemCart = /* GraphQL */ `
   query GetItemCart($id: ID!) {
     getItemCart(id: $id) {
@@ -236,6 +277,11 @@ export const getItemCart = /* GraphQL */ `
         dressLength
         dressWidth
         sleeveLength
+        waist
+        hip
+        rise
+        inseam
+        hemWidth
         size
         brand
         supplierName
@@ -293,6 +339,11 @@ export const getItemCartLog = /* GraphQL */ `
         dressLength
         dressWidth
         sleeveLength
+        waist
+        hip
+        rise
+        inseam
+        hemWidth
         size
         brand
         supplierName
@@ -350,6 +401,11 @@ export const getItemFavorite = /* GraphQL */ `
         dressLength
         dressWidth
         sleeveLength
+        waist
+        hip
+        rise
+        inseam
+        hemWidth
         size
         brand
         supplierName
@@ -423,6 +479,11 @@ export const searchItems = /* GraphQL */ `
         dressLength
         dressWidth
         sleeveLength
+        waist
+        hip
+        rise
+        inseam
+        hemWidth
         size
         brand
         supplierName
@@ -452,53 +513,32 @@ export const searchCartLogs = /* GraphQL */ `
       items {
         id
         userId
-        user {
-          id
-          name
-          nameKana
-          phoneNumber
-          address
-          postalCode
-        }
-        itemCartLogs {
-          items {
-            id
-            itemId
-            item {
-              id
-              name
-              description
-              stateDescription
-              imageURLs
-              status
-              season
-              bigCategory
-              smallCategory
-              color
-              dressLength
-              dressWidth
-              sleeveLength
-              size
-              brand
-              supplierName
-              material
-              rank
-              favoriteUser {
-                items {
-                  id
-                  itemId
-                  userId
-                  createdAt
-                  updatedAt
-                }
-                nextToken
-              }
-            }
-            cartLogId
-            createdAt
-            updatedAt
-          }
-        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+      total
+    }
+  }
+`;
+export const searchMessages = /* GraphQL */ `
+  query SearchMessages(
+    $filter: SearchableMessageFilterInput
+    $sort: SearchableMessageSortInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    searchMessages(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        text
+        room
+        user
         createdAt
         updatedAt
       }

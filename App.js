@@ -21,6 +21,9 @@ import OrderItem from './screens/OrderTab/OrderItem'
 import OrderList from './screens/OrderTab/OrderList'
 import TakeItemImage from './screens/ImageTab/TakeItemImage';
 
+import ChatList from './screens/ChatTab/ChatList'
+import Chat from './screens/ChatTab/Chat'
+
 Amplify.configure(awsmobile);
 
 const ItemTabStack = createStackNavigator(
@@ -50,6 +53,13 @@ const OrderTabStack = createStackNavigator(
   }
 )
 
+const SupportTabStack = createStackNavigator(
+  {
+    ChatList: { screen: ChatList },
+    Chat: { screen: Chat }
+  }
+)
+
 const Tab = createBottomTabNavigator(
   {
     'アイテム検索': {
@@ -69,6 +79,9 @@ const Tab = createBottomTabNavigator(
       navigationOptions: {
         tabBarIcon: ({ tintColor }) => <Icon size={24} name='bars' color={tintColor} />
       }
+    },
+    'サポート': {
+      screen: SupportTabStack,
     }
   }
 )

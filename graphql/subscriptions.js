@@ -17,6 +17,11 @@ export const onCreateItem = /* GraphQL */ `
       dressLength
       dressWidth
       sleeveLength
+      waist
+      hip
+      rise
+      inseam
+      hemWidth
       size
       brand
       supplierName
@@ -52,6 +57,11 @@ export const onUpdateItem = /* GraphQL */ `
       dressLength
       dressWidth
       sleeveLength
+      waist
+      hip
+      rise
+      inseam
+      hemWidth
       size
       brand
       supplierName
@@ -87,6 +97,11 @@ export const onDeleteItem = /* GraphQL */ `
       dressLength
       dressWidth
       sleeveLength
+      waist
+      hip
+      rise
+      inseam
+      hemWidth
       size
       brand
       supplierName
@@ -367,6 +382,42 @@ export const onDeleteCartLog = /* GraphQL */ `
     }
   }
 `;
+export const onCreateMessage = /* GraphQL */ `
+  subscription OnCreateMessage {
+    onCreateMessage {
+      id
+      text
+      room
+      user
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateMessage = /* GraphQL */ `
+  subscription OnUpdateMessage {
+    onUpdateMessage {
+      id
+      text
+      room
+      user
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteMessage = /* GraphQL */ `
+  subscription OnDeleteMessage {
+    onDeleteMessage {
+      id
+      text
+      room
+      user
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const onCreateItemCart = /* GraphQL */ `
   subscription OnCreateItemCart {
     onCreateItemCart {
@@ -387,6 +438,11 @@ export const onCreateItemCart = /* GraphQL */ `
         dressLength
         dressWidth
         sleeveLength
+        waist
+        hip
+        rise
+        inseam
+        hemWidth
         size
         brand
         supplierName
@@ -426,6 +482,11 @@ export const onUpdateItemCart = /* GraphQL */ `
         dressLength
         dressWidth
         sleeveLength
+        waist
+        hip
+        rise
+        inseam
+        hemWidth
         size
         brand
         supplierName
@@ -465,6 +526,11 @@ export const onDeleteItemCart = /* GraphQL */ `
         dressLength
         dressWidth
         sleeveLength
+        waist
+        hip
+        rise
+        inseam
+        hemWidth
         size
         brand
         supplierName
@@ -504,6 +570,11 @@ export const onCreateItemCartLog = /* GraphQL */ `
         dressLength
         dressWidth
         sleeveLength
+        waist
+        hip
+        rise
+        inseam
+        hemWidth
         size
         brand
         supplierName
@@ -543,6 +614,11 @@ export const onUpdateItemCartLog = /* GraphQL */ `
         dressLength
         dressWidth
         sleeveLength
+        waist
+        hip
+        rise
+        inseam
+        hemWidth
         size
         brand
         supplierName
@@ -582,6 +658,11 @@ export const onDeleteItemCartLog = /* GraphQL */ `
         dressLength
         dressWidth
         sleeveLength
+        waist
+        hip
+        rise
+        inseam
+        hemWidth
         size
         brand
         supplierName
@@ -621,6 +702,11 @@ export const onCreateItemFavorite = /* GraphQL */ `
         dressLength
         dressWidth
         sleeveLength
+        waist
+        hip
+        rise
+        inseam
+        hemWidth
         size
         brand
         supplierName
@@ -669,6 +755,11 @@ export const onUpdateItemFavorite = /* GraphQL */ `
         dressLength
         dressWidth
         sleeveLength
+        waist
+        hip
+        rise
+        inseam
+        hemWidth
         size
         brand
         supplierName
@@ -717,6 +808,11 @@ export const onDeleteItemFavorite = /* GraphQL */ `
         dressLength
         dressWidth
         sleeveLength
+        waist
+        hip
+        rise
+        inseam
+        hemWidth
         size
         brand
         supplierName
