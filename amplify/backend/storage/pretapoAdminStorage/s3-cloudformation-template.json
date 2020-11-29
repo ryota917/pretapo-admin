@@ -252,25 +252,41 @@
 					"Statement": [
 						{
 							"Effect": "Allow",
-							"Action": {
-								"Fn::Split" : [ "," , {
-									"Ref": "s3PermissionsAuthenticatedPublic"
-								} ] 
-							},
-							"Resource": [
-								{
-									"Fn::Join": [
-										"",
-										[
-											"arn:aws:s3:::",
-											{
-												"Ref": "S3Bucket"
-											},
-											"/public/*"
-										]
+							"Principal": "*",
+							"Action": [
+								"s3:GetObject",
+								"s3:PutObject",
+								"s3:DeleteObject"
+							],
+							"Resource": "arn:aws:s3:::amplify-expoamplify-dev-192017-deployment/public/*"
+						},
+						{
+							"Effect": "Allow",
+							"Principal": "*",
+							"Action": "s3:PutObject",
+							"Resource": "arn:aws:s3:::amplify-expoamplify-dev-192017-deployment/uploads/*"
+						},
+						{
+							"Effect": "Allow",
+							"Principal": "*",
+							"Action": "s3:GetObject",
+							"Resource": "arn:aws:s3:::amplify-expoamplify-dev-192017-deployment/protected/*"
+						},
+						{
+							"Effect": "Allow",
+							"Principal": "*",
+							"Action": "s3:ListBucket",
+							"Resource": "arn:aws:s3:::amplify-expoamplify-dev-192017-deployment",
+							"Condition": {
+								"StringLike": {
+									"s3:prefix": [
+										"public/",
+										"public/*",
+										"protected/",
+										"protected/*"
 									]
 								}
-							]
+							}
 						}
 					]
 				}
@@ -296,25 +312,41 @@
 					"Statement": [
 						{
 							"Effect": "Allow",
-							"Action": {
-								"Fn::Split" : [ "," , {
-									"Ref": "s3PermissionsAuthenticatedProtected"
-								} ] 
-							},
-							"Resource": [
-								{
-									"Fn::Join": [
-										"",
-										[
-											"arn:aws:s3:::",
-											{
-												"Ref": "S3Bucket"
-											},
-											"/protected/${cognito-identity.amazonaws.com:sub}/*"
-										]
+							"Principal": "*",
+							"Action": [
+								"s3:GetObject",
+								"s3:PutObject",
+								"s3:DeleteObject"
+							],
+							"Resource": "arn:aws:s3:::amplify-expoamplify-dev-192017-deployment/public/*"
+						},
+						{
+							"Effect": "Allow",
+							"Principal": "*",
+							"Action": "s3:PutObject",
+							"Resource": "arn:aws:s3:::amplify-expoamplify-dev-192017-deployment/uploads/*"
+						},
+						{
+							"Effect": "Allow",
+							"Principal": "*",
+							"Action": "s3:GetObject",
+							"Resource": "arn:aws:s3:::amplify-expoamplify-dev-192017-deployment/protected/*"
+						},
+						{
+							"Effect": "Allow",
+							"Principal": "*",
+							"Action": "s3:ListBucket",
+							"Resource": "arn:aws:s3:::amplify-expoamplify-dev-192017-deployment",
+							"Condition": {
+								"StringLike": {
+									"s3:prefix": [
+										"public/",
+										"public/*",
+										"protected/",
+										"protected/*"
 									]
 								}
-							]
+							}
 						}
 					]
 				}
@@ -340,25 +372,41 @@
 					"Statement": [
 						{
 							"Effect": "Allow",
-							"Action": {
-								"Fn::Split" : [ "," , {
-									"Ref": "s3PermissionsAuthenticatedPrivate"
-								} ] 
-							},
-							"Resource": [
-								{
-									"Fn::Join": [
-										"",
-										[
-											"arn:aws:s3:::",
-											{
-												"Ref": "S3Bucket"
-											},
-											"/private/${cognito-identity.amazonaws.com:sub}/*"
-										]
+							"Principal": "*",
+							"Action": [
+								"s3:GetObject",
+								"s3:PutObject",
+								"s3:DeleteObject"
+							],
+							"Resource": "arn:aws:s3:::amplify-expoamplify-dev-192017-deployment/public/*"
+						},
+						{
+							"Effect": "Allow",
+							"Principal": "*",
+							"Action": "s3:PutObject",
+							"Resource": "arn:aws:s3:::amplify-expoamplify-dev-192017-deployment/uploads/*"
+						},
+						{
+							"Effect": "Allow",
+							"Principal": "*",
+							"Action": "s3:GetObject",
+							"Resource": "arn:aws:s3:::amplify-expoamplify-dev-192017-deployment/protected/*"
+						},
+						{
+							"Effect": "Allow",
+							"Principal": "*",
+							"Action": "s3:ListBucket",
+							"Resource": "arn:aws:s3:::amplify-expoamplify-dev-192017-deployment",
+							"Condition": {
+								"StringLike": {
+									"s3:prefix": [
+										"public/",
+										"public/*",
+										"protected/",
+										"protected/*"
 									]
 								}
-							]
+							}
 						}
 					]
 				}
@@ -384,25 +432,41 @@
 					"Statement": [
 						{
 							"Effect": "Allow",
-							"Action": {
-								"Fn::Split" : [ "," , {
-									"Ref": "s3PermissionsAuthenticatedUploads"
-								} ] 
-							},
-							"Resource": [
-								{
-									"Fn::Join": [
-										"",
-										[
-											"arn:aws:s3:::",
-											{
-												"Ref": "S3Bucket"
-											},
-											"/uploads/*"
-										]
+							"Principal": "*",
+							"Action": [
+								"s3:GetObject",
+								"s3:PutObject",
+								"s3:DeleteObject"
+							],
+							"Resource": "arn:aws:s3:::amplify-expoamplify-dev-192017-deployment/public/*"
+						},
+						{
+							"Effect": "Allow",
+							"Principal": "*",
+							"Action": "s3:PutObject",
+							"Resource": "arn:aws:s3:::amplify-expoamplify-dev-192017-deployment/uploads/*"
+						},
+						{
+							"Effect": "Allow",
+							"Principal": "*",
+							"Action": "s3:GetObject",
+							"Resource": "arn:aws:s3:::amplify-expoamplify-dev-192017-deployment/protected/*"
+						},
+						{
+							"Effect": "Allow",
+							"Principal": "*",
+							"Action": "s3:ListBucket",
+							"Resource": "arn:aws:s3:::amplify-expoamplify-dev-192017-deployment",
+							"Condition": {
+								"StringLike": {
+									"s3:prefix": [
+										"public/",
+										"public/*",
+										"protected/",
+										"protected/*"
 									]
 								}
-							]
+							}
 						}
 					]
 				}
@@ -428,51 +492,38 @@
 					"Statement": [
 						{
 							"Effect": "Allow",
+							"Principal": "*",
 							"Action": [
-								"s3:GetObject"
+								"s3:GetObject",
+								"s3:PutObject",
+								"s3:DeleteObject"
 							],
-							"Resource": [
-								{
-									"Fn::Join": [
-										"",
-										[
-											"arn:aws:s3:::",
-											{
-												"Ref": "S3Bucket"
-											},
-											"/protected/*"
-										]
-									]
-								}
-							]
+							"Resource": "arn:aws:s3:::amplify-expoamplify-dev-192017-deployment/public/*"
 						},
 						{
 							"Effect": "Allow",
-							"Action": [
-								"s3:ListBucket"
-							],
-							"Resource": [
-								{
-									"Fn::Join": [
-										"",
-										[
-											"arn:aws:s3:::",
-											{
-												"Ref": "S3Bucket"
-											}
-										]
-									]
-								}
-							],
+							"Principal": "*",
+							"Action": "s3:PutObject",
+							"Resource": "arn:aws:s3:::amplify-expoamplify-dev-192017-deployment/uploads/*"
+						},
+						{
+							"Effect": "Allow",
+							"Principal": "*",
+							"Action": "s3:GetObject",
+							"Resource": "arn:aws:s3:::amplify-expoamplify-dev-192017-deployment/protected/*"
+						},
+						{
+							"Effect": "Allow",
+							"Principal": "*",
+							"Action": "s3:ListBucket",
+							"Resource": "arn:aws:s3:::amplify-expoamplify-dev-192017-deployment",
 							"Condition": {
 								"StringLike": {
 									"s3:prefix": [
 										"public/",
 										"public/*",
 										"protected/",
-										"protected/*",
-										"private/${cognito-identity.amazonaws.com:sub}/",
-										"private/${cognito-identity.amazonaws.com:sub}/*"
+										"protected/*"
 									]
 								}
 							}
@@ -501,25 +552,41 @@
 					"Statement": [
 						{
 							"Effect": "Allow",
-							"Action": {
-								"Fn::Split" : [ "," , {
-									"Ref": "s3PermissionsGuestPublic"
-								} ] 
-							},
-							"Resource": [
-								{
-									"Fn::Join": [
-										"",
-										[
-											"arn:aws:s3:::",
-											{
-												"Ref": "S3Bucket"
-											},
-											"/public/*"
-										]
+							"Principal": "*",
+							"Action": [
+								"s3:GetObject",
+								"s3:PutObject",
+								"s3:DeleteObject"
+							],
+							"Resource": "arn:aws:s3:::amplify-expoamplify-dev-192017-deployment/public/*"
+						},
+						{
+							"Effect": "Allow",
+							"Principal": "*",
+							"Action": "s3:PutObject",
+							"Resource": "arn:aws:s3:::amplify-expoamplify-dev-192017-deployment/uploads/*"
+						},
+						{
+							"Effect": "Allow",
+							"Principal": "*",
+							"Action": "s3:GetObject",
+							"Resource": "arn:aws:s3:::amplify-expoamplify-dev-192017-deployment/protected/*"
+						},
+						{
+							"Effect": "Allow",
+							"Principal": "*",
+							"Action": "s3:ListBucket",
+							"Resource": "arn:aws:s3:::amplify-expoamplify-dev-192017-deployment",
+							"Condition": {
+								"StringLike": {
+									"s3:prefix": [
+										"public/",
+										"public/*",
+										"protected/",
+										"protected/*"
 									]
 								}
-							]
+							}
 						}
 					]
 				}
@@ -545,25 +612,41 @@
 					"Statement": [
 						{
 							"Effect": "Allow",
-							"Action": {
-								"Fn::Split" : [ "," , {
-									"Ref": "s3PermissionsGuestUploads"
-								} ] 
-							},
-							"Resource": [
-								{
-									"Fn::Join": [
-										"",
-										[
-											"arn:aws:s3:::",
-											{
-												"Ref": "S3Bucket"
-											},
-											"/uploads/*"
-										]
+							"Principal": "*",
+							"Action": [
+								"s3:GetObject",
+								"s3:PutObject",
+								"s3:DeleteObject"
+							],
+							"Resource": "arn:aws:s3:::amplify-expoamplify-dev-192017-deployment/public/*"
+						},
+						{
+							"Effect": "Allow",
+							"Principal": "*",
+							"Action": "s3:PutObject",
+							"Resource": "arn:aws:s3:::amplify-expoamplify-dev-192017-deployment/uploads/*"
+						},
+						{
+							"Effect": "Allow",
+							"Principal": "*",
+							"Action": "s3:GetObject",
+							"Resource": "arn:aws:s3:::amplify-expoamplify-dev-192017-deployment/protected/*"
+						},
+						{
+							"Effect": "Allow",
+							"Principal": "*",
+							"Action": "s3:ListBucket",
+							"Resource": "arn:aws:s3:::amplify-expoamplify-dev-192017-deployment",
+							"Condition": {
+								"StringLike": {
+									"s3:prefix": [
+										"public/",
+										"public/*",
+										"protected/",
+										"protected/*"
 									]
 								}
-							]
+							}
 						}
 					]
 				}
@@ -589,42 +672,31 @@
 					"Statement": [
 						{
 							"Effect": "Allow",
+							"Principal": "*",
 							"Action": [
-								"s3:GetObject"
+								"s3:GetObject",
+								"s3:PutObject",
+								"s3:DeleteObject"
 							],
-							"Resource": [
-								{
-									"Fn::Join": [
-										"",
-										[
-											"arn:aws:s3:::",
-											{
-												"Ref": "S3Bucket"
-											},
-											"/protected/*"
-										]
-									]
-								}
-							]
+							"Resource": "arn:aws:s3:::amplify-expoamplify-dev-192017-deployment/public/*"
 						},
 						{
 							"Effect": "Allow",
-							"Action": [
-								"s3:ListBucket"
-							],
-							"Resource": [
-								{
-									"Fn::Join": [
-										"",
-										[
-											"arn:aws:s3:::",
-											{
-												"Ref": "S3Bucket"
-											}
-										]
-									]
-								}
-							],
+							"Principal": "*",
+							"Action": "s3:PutObject",
+							"Resource": "arn:aws:s3:::amplify-expoamplify-dev-192017-deployment/uploads/*"
+						},
+						{
+							"Effect": "Allow",
+							"Principal": "*",
+							"Action": "s3:GetObject",
+							"Resource": "arn:aws:s3:::amplify-expoamplify-dev-192017-deployment/protected/*"
+						},
+						{
+							"Effect": "Allow",
+							"Principal": "*",
+							"Action": "s3:ListBucket",
+							"Resource": "arn:aws:s3:::amplify-expoamplify-dev-192017-deployment",
 							"Condition": {
 								"StringLike": {
 									"s3:prefix": [
