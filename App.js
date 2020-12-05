@@ -21,6 +21,9 @@ import OrderItem from './screens/OrderTab/OrderItem'
 import OrderList from './screens/OrderTab/OrderList'
 import TakeItemImage from './screens/ImageTab/TakeItemImage';
 
+import ChatList from './screens/ChatTab/ChatList'
+import Chat from './screens/ChatTab/Chat'
+
 Amplify.configure(
   {
     "aws_project_region": "ap-northeast-1",
