@@ -21,7 +21,34 @@ import OrderItem from './screens/OrderTab/OrderItem'
 import OrderList from './screens/OrderTab/OrderList'
 import TakeItemImage from './screens/ImageTab/TakeItemImage';
 
-Amplify.configure(awsmobile);
+Amplify.configure(
+  {
+    "aws_project_region": "ap-northeast-1",
+    "aws_appsync_graphqlEndpoint": "https://lpysywb5rnamtdmuojjypxxkri.appsync-api.ap-northeast-1.amazonaws.com/graphql",
+    "aws_appsync_region": "ap-northeast-1",
+    "aws_appsync_authenticationType": "API_KEY",
+    "aws_appsync_apiKey": "da2-xgoywjersjefvh6kg5fgy3r6ci",
+    "aws_cognito_identity_pool_id": "ap-northeast-1:141b0867-0b72-4a60-93b7-9ceddeb0f8d9",
+    "aws_cognito_region": "ap-northeast-1",
+    "aws_user_pools_id": "ap-northeast-1_Z7bENzAfc",
+    "aws_user_pools_web_client_id": "7jaghc2ldneoblo1u2gdpnalja",
+    "oauth": {},
+    "aws_user_files_s3_bucket": "amplify-expoamplify-dev-192017-deployment",
+    "aws_user_files_s3_bucket_region": "ap-northeast-1",
+    Auth: {
+      identityPoolId: 'ap-northeast-1:141b0867-0b72-4a60-93b7-9ceddeb0f8d9', //REQUIRED - Amazon Cognito Identity Pool ID
+      region: 'ap-northeast-1', // REQUIRED - Amazon Cognito Region
+      // userPoolId: 'ap-northeast-1_krUoox3yW', //OPTIONAL - Amazon Cognito User Pool ID
+      // userPoolWebClientId: 'rruh53etit2lj1h760u11nfb', //OPTIONAL - Amazon Cognito Web Client ID
+    },
+    Storage: {
+      AWSS3: {
+          bucket: 'amplify-expoamplify-dev-192017-deployment', //REQUIRED -  Amazon S3 bucket name
+          region: 'ap-northeast-1', //OPTIONAL -  Amazon service region
+      }
+    }
+  },
+)
 
 const ItemTabStack = createStackNavigator(
   {

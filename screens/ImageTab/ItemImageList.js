@@ -13,12 +13,9 @@ const childrenHeight = 48*4
 
 const ItemImageList = ({navigation}) => {
     const [imageURLs, setImageURLs] = useState(navigation.state.params.item.imageURLs);
+    const [hoge, setHoge] = useState('');
 
     useEffect(() => {
-        // Storage.put()
-        //   .then (result => console.log(result)) // {key: "test.txt"}
-        //   .catch(err => console.log(err));
-
         (async () => {
           if (Platform.OS !== 'web') {
             const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
@@ -28,6 +25,14 @@ const ItemImageList = ({navigation}) => {
           }
         })();
       }, []);
+
+      useEffect(() => {
+        Storage.get("clothes_imgs/551/1.JPG", { level: 'public' }).then(result => {
+            const blob = result.blob()
+            setHoge(blob);
+            console.log(blob, 'resultを取りましたyo-');
+          }).catch(err => console.log(err));
+      })
 
     const renderItem = (imageURLs,index) => {
         return (
@@ -86,6 +91,17 @@ const ItemImageList = ({navigation}) => {
                 title='プレビュー'
                 color='blue'
             />
+            <Button
+                title='届けS3'
+                onPress={() => {
+                    Storage.put('clothes_imgs/551/888.JPG', hoge, {
+                        contentType: 'image/jpg',
+                        level: 'public',
+                    })
+                      .then (result => console.log(result)) // {key: "test.txt"}
+                      .catch(err => console.log(err));
+                }}>
+            </Button>
         </SafeAreaView>
     )
 }
