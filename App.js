@@ -77,6 +77,13 @@ const OrderTabStack = createStackNavigator(
   }
 )
 
+const SupportTabStack = createStackNavigator(
+  {
+    ChatList: { screen: ChatList },
+    Chat: { screen: Chat }
+  }
+)
+
 const Tab = createBottomTabNavigator(
   {
     'アイテム検索': {
@@ -96,6 +103,9 @@ const Tab = createBottomTabNavigator(
       navigationOptions: {
         tabBarIcon: ({ tintColor }) => <Icon size={24} name='bars' color={tintColor} />
       }
+    },
+    'サポート': {
+      screen: SupportTabStack,
     }
   }
 )

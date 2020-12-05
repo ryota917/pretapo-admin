@@ -20,6 +20,11 @@ export const createItem = /* GraphQL */ `
       dressLength
       dressWidth
       sleeveLength
+      waist
+      hip
+      rise
+      inseam
+      hemWidth
       size
       brand
       supplierName
@@ -58,6 +63,11 @@ export const updateItem = /* GraphQL */ `
       dressLength
       dressWidth
       sleeveLength
+      waist
+      hip
+      rise
+      inseam
+      hemWidth
       size
       brand
       supplierName
@@ -96,6 +106,11 @@ export const deleteItem = /* GraphQL */ `
       dressLength
       dressWidth
       sleeveLength
+      waist
+      hip
+      rise
+      inseam
+      hemWidth
       size
       brand
       supplierName
@@ -403,6 +418,51 @@ export const deleteCartLog = /* GraphQL */ `
     }
   }
 `;
+export const createMessage = /* GraphQL */ `
+  mutation CreateMessage(
+    $input: CreateMessageInput!
+    $condition: ModelMessageConditionInput
+  ) {
+    createMessage(input: $input, condition: $condition) {
+      id
+      text
+      room
+      user
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateMessage = /* GraphQL */ `
+  mutation UpdateMessage(
+    $input: UpdateMessageInput!
+    $condition: ModelMessageConditionInput
+  ) {
+    updateMessage(input: $input, condition: $condition) {
+      id
+      text
+      room
+      user
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteMessage = /* GraphQL */ `
+  mutation DeleteMessage(
+    $input: DeleteMessageInput!
+    $condition: ModelMessageConditionInput
+  ) {
+    deleteMessage(input: $input, condition: $condition) {
+      id
+      text
+      room
+      user
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const createItemCart = /* GraphQL */ `
   mutation CreateItemCart(
     $input: CreateItemCartInput!
@@ -426,6 +486,11 @@ export const createItemCart = /* GraphQL */ `
         dressLength
         dressWidth
         sleeveLength
+        waist
+        hip
+        rise
+        inseam
+        hemWidth
         size
         brand
         supplierName
@@ -468,6 +533,11 @@ export const updateItemCart = /* GraphQL */ `
         dressLength
         dressWidth
         sleeveLength
+        waist
+        hip
+        rise
+        inseam
+        hemWidth
         size
         brand
         supplierName
@@ -510,6 +580,11 @@ export const deleteItemCart = /* GraphQL */ `
         dressLength
         dressWidth
         sleeveLength
+        waist
+        hip
+        rise
+        inseam
+        hemWidth
         size
         brand
         supplierName
@@ -552,6 +627,11 @@ export const createItemCartLog = /* GraphQL */ `
         dressLength
         dressWidth
         sleeveLength
+        waist
+        hip
+        rise
+        inseam
+        hemWidth
         size
         brand
         supplierName
@@ -594,6 +674,11 @@ export const updateItemCartLog = /* GraphQL */ `
         dressLength
         dressWidth
         sleeveLength
+        waist
+        hip
+        rise
+        inseam
+        hemWidth
         size
         brand
         supplierName
@@ -636,6 +721,11 @@ export const deleteItemCartLog = /* GraphQL */ `
         dressLength
         dressWidth
         sleeveLength
+        waist
+        hip
+        rise
+        inseam
+        hemWidth
         size
         brand
         supplierName
@@ -678,6 +768,11 @@ export const createItemFavorite = /* GraphQL */ `
         dressLength
         dressWidth
         sleeveLength
+        waist
+        hip
+        rise
+        inseam
+        hemWidth
         size
         brand
         supplierName
@@ -729,6 +824,11 @@ export const updateItemFavorite = /* GraphQL */ `
         dressLength
         dressWidth
         sleeveLength
+        waist
+        hip
+        rise
+        inseam
+        hemWidth
         size
         brand
         supplierName
@@ -780,6 +880,11 @@ export const deleteItemFavorite = /* GraphQL */ `
         dressLength
         dressWidth
         sleeveLength
+        waist
+        hip
+        rise
+        inseam
+        hemWidth
         size
         brand
         supplierName
