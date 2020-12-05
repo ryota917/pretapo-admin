@@ -3,6 +3,7 @@ import {Dimensions, Image, View, SafeAreaView, Button, Platform} from 'react-nat
 import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import AutoDragSortableView from '../../widget/AutoDragSortableView'
 import * as ImagePicker from 'expo-image-picker'
+import { Storage } from 'aws-amplify';
 
 const {width} = Dimensions.get('window')
 
@@ -12,17 +13,7 @@ const childrenHeight = 48*4
 
 const ItemImageList = ({navigation}) => {
     const [imageURLs, setImageURLs] = useState(navigation.state.params.item.imageURLs);
-    // 1からはじまる
-    const imageURLsIndex = {};
-
-    const [newImage, setNewImage] = useState(null);
-
-    useEffect(() => {
-        imageURLs.forEach((imageURL, i) => {
-            imageURLsIndex[i+1] = imageURL
-        })
-        console.log(imageURLsIndex)
-    }, [newImage])
+    const [hoge, setHoge] = useState('');
 
     useEffect(() => {
         (async () => {
@@ -34,6 +25,14 @@ const ItemImageList = ({navigation}) => {
           }
         })();
       }, []);
+
+      useEffect(() => {
+        Storage.get("clothes_imgs/551/1.JPG", { level: 'public' }).then(result => {
+            const blob = result.blob()
+            setHoge(blob);
+            console.log(blob, 'resultを取りましたyo-');
+          }).catch(err => console.log(err));
+      })
 
     const renderItem = (imageURLs,index) => {
         return (
@@ -50,17 +49,12 @@ const ItemImageList = ({navigation}) => {
             aspect: [4, 3],
             quality: 1,
         });
-  
-        console.log(result);
-
-        setImageURLs([...imageURLs, result.uri])
-
-        const imageCounts = imageURLs.length
-        imageURLsIndex[imageCounts] = result.uri
 
         if (!result.cancelled) {
-          setNewImage(result.uri);
+          setImageURLs([...imageURLs, result.uri])
         }
+
+        console.log(imageURLs);
     };
 
     return (
@@ -81,26 +75,14 @@ const ItemImageList = ({navigation}) => {
                     return renderItem(imageURLs,index)
                 }}
                 onDragEnd={(from, to)=> {
-                    const copedImageURLsIndex = { ...imageURLsIndex }
-                    const finalIndex = imageURLs.length - 1
-                    // 最小から最大へ動いた時
-                    if (from == 0 && to == finalIndex) {
-                        imageURLsIndex[finalIndex+1] = copedImageURLsIndex[1]
-                        for (let i = 1; i <= finalIndex; i++) {
-                            imageURLsIndex[i] = copedImageURLsIndex[i+1]
-                        }
-                    // 最大から最小へ動いた時
-                    } else if (from == finalIndex && to == 0) {
-                        imageURLsIndex[1] = copedImageURLsIndex[finalIndex+1]
-                        for (let i = 2; i <= finalIndex + 1; i++) {
-                            imageURLsIndex[i] = copedImageURLsIndex[i-1]
-                        }
-                    } else {
-                        imageURLsIndex[from+1] = copedImageURLsIndex[to+1]
-                        imageURLsIndex[to+1] = copedImageURLsIndex[from+1]
-                    }
                     console.log(from, to)
-                    console.log(imageURLsIndex)
+                    const copedImageURLs = { ...imageURLs }
+                    // fromを削除
+                    imageURLs.splice(from, 1)
+                    // toに挿入
+                    imageURLs.splice(to, 0, copedImageURLs[from])
+
+                    console.log(imageURLs)
                 }}
             />
             <Button title="写真を投稿する" onPress={pickImage} />
@@ -109,6 +91,17 @@ const ItemImageList = ({navigation}) => {
                 title='プレビュー'
                 color='blue'
             />
+            <Button
+                title='届けS3'
+                onPress={() => {
+                    Storage.put('clothes_imgs/551/888.JPG', hoge, {
+                        contentType: 'image/jpg',
+                        level: 'public',
+                    })
+                      .then (result => console.log(result)) // {key: "test.txt"}
+                      .catch(err => console.log(err));
+                }}>
+            </Button>
         </SafeAreaView>
     )
 }
