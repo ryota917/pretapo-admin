@@ -147,6 +147,8 @@ export const createUser = /* GraphQL */ `
       gender
       rental
       cartId
+      customerId
+      registered
       cart {
         id
         userId
@@ -181,6 +183,8 @@ export const updateUser = /* GraphQL */ `
       gender
       rental
       cartId
+      customerId
+      registered
       cart {
         id
         userId
@@ -215,6 +219,8 @@ export const deleteUser = /* GraphQL */ `
       gender
       rental
       cartId
+      customerId
+      registered
       cart {
         id
         userId
@@ -252,6 +258,8 @@ export const createCart = /* GraphQL */ `
         gender
         rental
         cartId
+        customerId
+        registered
         createdAt
         updatedAt
       }
@@ -283,6 +291,8 @@ export const updateCart = /* GraphQL */ `
         gender
         rental
         cartId
+        customerId
+        registered
         createdAt
         updatedAt
       }
@@ -314,6 +324,8 @@ export const deleteCart = /* GraphQL */ `
         gender
         rental
         cartId
+        customerId
+        registered
         createdAt
         updatedAt
       }
@@ -346,6 +358,8 @@ export const createCartLog = /* GraphQL */ `
         gender
         rental
         cartId
+        customerId
+        registered
         createdAt
         updatedAt
       }
@@ -377,6 +391,8 @@ export const updateCartLog = /* GraphQL */ `
         gender
         rental
         cartId
+        customerId
+        registered
         createdAt
         updatedAt
       }
@@ -408,6 +424,8 @@ export const deleteCartLog = /* GraphQL */ `
         gender
         rental
         cartId
+        customerId
+        registered
         createdAt
         updatedAt
       }
@@ -793,6 +811,8 @@ export const createItemFavorite = /* GraphQL */ `
         gender
         rental
         cartId
+        customerId
+        registered
         createdAt
         updatedAt
       }
@@ -849,6 +869,8 @@ export const updateItemFavorite = /* GraphQL */ `
         gender
         rental
         cartId
+        customerId
+        registered
         createdAt
         updatedAt
       }
@@ -905,6 +927,8 @@ export const deleteItemFavorite = /* GraphQL */ `
         gender
         rental
         cartId
+        customerId
+        registered
         createdAt
         updatedAt
       }

@@ -3,7 +3,8 @@ import {Dimensions, Image, View, SafeAreaView, Button, Platform} from 'react-nat
 import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import AutoDragSortableView from '../../widget/AutoDragSortableView'
 import * as ImagePicker from 'expo-image-picker'
-import { Storage } from 'aws-amplify';
+import { Storage, Amplify, API, graphqlOperation } from 'aws-amplify'
+import * as gqlMutations from '../../graphql/mutations'
 
 const {width} = Dimensions.get('window')
 
@@ -13,31 +14,11 @@ const childrenHeight = 48*4
 
 const ItemImageList = ({navigation}) => {
     const [imageURLs, setImageURLs] = useState(navigation.state.params.item.imageURLs);
-    const [hoge, setHoge] = useState('');
-
-    useEffect(() => {
-        (async () => {
-          if (Platform.OS !== 'web') {
-            const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
-            if (status !== 'granted') {
-              alert('Sorry, we need camera roll permissions to make this work!');
-            }
-          }
-        })();
-      }, []);
-
-      useEffect(() => {
-        Storage.get("clothes_imgs/551/1.JPG", { level: 'public' }).then(result => {
-            const blob = result.blob()
-            setHoge(blob);
-            console.log(blob, 'resultを取りましたyo-');
-          }).catch(err => console.log(err));
-      })
 
     const renderItem = (imageURLs,index) => {
         return (
             <View>
-                <Image source={{uri: imageURLs}} style={{ width: wp('33%'), height: wp('33%') }} />
+                <Image source={{uri: imageURLs}} style={{ width: wp('10%'), height: wp('10%') }} />
             </View>
         )
     }
@@ -49,19 +30,39 @@ const ItemImageList = ({navigation}) => {
             aspect: [4, 3],
             quality: 1,
         });
+        console.log(result)
 
         if (!result.cancelled) {
-          setImageURLs([...imageURLs, result.uri])
+            console.log(result.uri)
+            setImageURLs([...imageURLs, result.uri])
         }
 
-        console.log(imageURLs);
+        console.log(imageURLs)
     };
+
+    const onPressPut = async () => {
+        let imagesArr = []
+        imageURLs.map((image, idx) => {
+            console.log(idx)
+            Storage.put('clothes_imgs/551/' + (idx + 1) + '.JPG', image, { contentType: 'image/jpeg' })
+                .then(result => console.log(result))
+                .catch(err => console.log(err))
+            imagesArr.push("https://d36tszdawvpfsc.cloudfront.net/public/clothes_imgs/551/" + (idx + 1) + ".JPG")
+        })
+        //dynamoを更新
+        const res = await API.graphql(graphqlOperation(gqlMutations.updateItem, {
+            input: {
+                id: '551',
+                imageURLs: imagesArr
+            }
+        }))
+        console.log(res)
+    }
 
     return (
         <SafeAreaView style={{flex: 1}}>
             <AutoDragSortableView
                 dataSource={imageURLs}
-                
                 parentWidth={parentWidth}
                 childrenWidth= {childrenWidth}
                 marginChildrenBottom={10}
@@ -69,7 +70,6 @@ const ItemImageList = ({navigation}) => {
                 marginChildrenLeft = {10}
                 marginChildrenTop = {10}
                 childrenHeight={childrenHeight}
-
                 keyExtractor={(imageURLs,index)=> imageURLs}
                 renderItem={(imageURLs,index)=>{
                     return renderItem(imageURLs,index)
@@ -94,14 +94,18 @@ const ItemImageList = ({navigation}) => {
             <Button
                 title='届けS3'
                 onPress={() => {
-                    Storage.put('clothes_imgs/551/888.JPG', hoge, {
+                    console.log(hoge)
+                    Storage.put('clothes_imgs/551/12.JPG', hoge, {
                         contentType: 'image/jpg',
                         level: 'public',
                     })
                       .then (result => console.log(result)) // {key: "test.txt"}
-                      .catch(err => console.log(err));
-                }}>
-            </Button>
+                        .catch(err => console.log(err));
+                }} />
+            <Button
+                onPress={onPressPut}
+                title='onpressput'
+            />
         </SafeAreaView>
     )
 }

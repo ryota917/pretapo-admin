@@ -1,8 +1,8 @@
 {
-    "identityPoolName": "pretapoadmin600fb63a_identitypool_600fb63a",
+    "identityPoolName": "pretapoadmine208bc09_identitypool_e208bc09",
     "allowUnauthenticatedIdentities": true,
-    "resourceNameTruncated": "pretap600fb63a",
-    "userPoolName": "pretapoadmin600fb63a_userpool_600fb63a",
+    "resourceNameTruncated": "pretape208bc09",
+    "userPoolName": "pretapoadmine208bc09_userpool_e208bc09",
     "autoVerifiedAttributes": [
         "email"
     ],
@@ -28,10 +28,10 @@
     "userpoolClientReadAttributes": [
         "email"
     ],
-    "userpoolClientLambdaRole": "pretap600fb63a_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "pretape208bc09_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "600fb63a",
-    "resourceName": "pretapoadmin600fb63a",
+    "sharedId": "e208bc09",
+    "resourceName": "pretapoadmine208bc09",
     "authSelections": "identityPoolAndUserPool",
     "authRoleArn": {
         "Fn::GetAtt": [
@@ -46,9 +46,6 @@
         ]
     },
     "useDefault": "default",
-    "usernameAttributes": [
-        "email"
-    ],
     "userPoolGroupList": [],
     "serviceName": "Cognito",
     "dependsOn": []

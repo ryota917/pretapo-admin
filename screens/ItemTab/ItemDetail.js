@@ -162,14 +162,14 @@ export default class ItemDetail extends React.Component {
                                 placeholder={prevItem.bigCategory[0]}
                             />
                         </View>
-                        <View style={styles.dataView}>
+                        {/* <View style={styles.dataView}>
                             <Text style={styles.dataText}>小カテゴリ</Text>
                             <TextInput
                                 style={styles.dataInput}
                                 onChangeText={(smallCategory) => this.onChangeData('smallCategory', smallCategory)}
                                 placeholder={prevItem.smallCategory[0]}
                             />
-                        </View>
+                        </View> */}
                     </View>
                     <View style={styles.flexView}>
                         <View style={styles.dataView}>

@@ -93,6 +93,8 @@ export const getUser = /* GraphQL */ `
       gender
       rental
       cartId
+      customerId
+      registered
       cart {
         id
         userId
@@ -129,6 +131,8 @@ export const listUsers = /* GraphQL */ `
         gender
         rental
         cartId
+        customerId
+        registered
         createdAt
         updatedAt
       }
@@ -153,6 +157,8 @@ export const getCart = /* GraphQL */ `
         gender
         rental
         cartId
+        customerId
+        registered
         createdAt
         updatedAt
       }
@@ -199,6 +205,8 @@ export const getCartLog = /* GraphQL */ `
         gender
         rental
         cartId
+        customerId
+        registered
         createdAt
         updatedAt
       }
@@ -426,6 +434,8 @@ export const getItemFavorite = /* GraphQL */ `
         gender
         rental
         cartId
+        customerId
+        registered
         createdAt
         updatedAt
       }

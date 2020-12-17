@@ -1,20 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput } from 'react-native'
 import { API, graphqlOperation } from 'aws-amplify'
 import * as gqlQueries from '../../graphql/queries' // read
 import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import Icon from 'react-native-vector-icons/Feather'
 
-const SearchItemImage = ({ navigation }) => {
+const SearchItemImage = (props) => {
     const [searchId, setSearchId] = useState();
     const [alertVisible, setAlertVisible] = useState(false);
+    const [items, setItems] = useState([])
 
     const searchItemImage = async () => {
         try {
             const res = await API.graphql(graphqlOperation(gqlQueries.getItem, { id: searchId }))
             const item = res.data.getItem
             if(item) {
-                navigation.navigate('ItemImageList', { item: item })
+                props.navigation.navigate('ItemImageList', { item: item })
                 console.log(item.imageURLs)
             } else {
                 setAlertVisible(true)
@@ -24,6 +25,18 @@ const SearchItemImage = ({ navigation }) => {
             console.error(err)
         }
     }
+
+    useEffect(() => {
+        console.log('useEffectが呼び出されます')
+        const fetchItems = async () => {
+            props.navigation.addListener('didFocus', async () => {
+                const res = await API.graphql(graphqlOperation(gqlQueries.listItems))
+                console.log(res)
+                // setItems()
+            })
+        }
+        fetchItems()
+    }, [props.navigation])
 
     return(
         <View style={styles.container}>
@@ -46,6 +59,19 @@ const SearchItemImage = ({ navigation }) => {
                         style={styles.icon}
                     />
                 </View>
+                {/* {messages.map((message, idx) =>
+                    <TouchableHighlight
+                        key={idx}
+                        onPress={() => props.navigation.navigate('Chat', { message: message })}
+                        underlayColor='white'
+                    >
+                        <View style={{ borderColor: 'silver', borderBottomWidth: 1, height: 100, alignItems: 'center', justifyContent: 'center' }}>
+                            <Text style={{ marginBottom: 10 }}>{message['room']}</Text>
+                            <Text>{message['text']}</Text>
+                        </View>
+                    </TouchableHighlight>
+                )} */}
+                {}
             </View>
         </View>
     )

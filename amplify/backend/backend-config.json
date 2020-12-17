@@ -1,16 +1,11 @@
 {
   "auth": {
-    "pretapoadmin600fb63a": {
+    "pretapoadmine208bc09": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
       "customAuth": false
     }
   },
-  "storage": {
-    "pretapoAdminStorage": {
-      "service": "S3",
-      "providerPlugin": "awscloudformation"
-    }
-  }
+  "storage": {}
 }

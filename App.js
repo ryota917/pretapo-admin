@@ -21,32 +21,34 @@ import OrderItem from './screens/OrderTab/OrderItem'
 import OrderList from './screens/OrderTab/OrderList'
 import TakeItemImage from './screens/ImageTab/TakeItemImage';
 
+//import ChatTab
 import ChatList from './screens/ChatTab/ChatList'
 import Chat from './screens/ChatTab/Chat'
+
+//import CreateTab
+import { CreateTab } from './screens/CreateTab/CreateTab'
 
 Amplify.configure(
   {
     "aws_project_region": "ap-northeast-1",
-    "aws_appsync_graphqlEndpoint": "https://lpysywb5rnamtdmuojjypxxkri.appsync-api.ap-northeast-1.amazonaws.com/graphql",
+    "aws_appsync_graphqlEndpoint": "https://bk7lszqtorbhrjwsv6kpumcdrq.appsync-api.ap-northeast-1.amazonaws.com/graphql",
     "aws_appsync_region": "ap-northeast-1",
     "aws_appsync_authenticationType": "API_KEY",
-    "aws_appsync_apiKey": "da2-xgoywjersjefvh6kg5fgy3r6ci",
-    "aws_cognito_identity_pool_id": "ap-northeast-1:141b0867-0b72-4a60-93b7-9ceddeb0f8d9",
+    "aws_appsync_apiKey": "da2-uiuqep6yuvgx7f6wppqqtrtwuq",
+    "aws_cognito_identity_pool_id": "ap-northeast-1:4394e108-1e7d-449c-a1bb-a8a729ed4541",
     "aws_cognito_region": "ap-northeast-1",
-    "aws_user_pools_id": "ap-northeast-1_Z7bENzAfc",
-    "aws_user_pools_web_client_id": "7jaghc2ldneoblo1u2gdpnalja",
+    "aws_user_pools_id": "ap-northeast-1_kZyCxD80X",
+    "aws_user_pools_web_client_id": "7a7nv8v8462d0cc1bev5v1v7dg",
     "oauth": {},
-    "aws_user_files_s3_bucket": "amplify-expoamplify-dev-192017-deployment",
+    "aws_user_files_s3_bucket": "amplify-pretapo-prod-121107-deployment",
     "aws_user_files_s3_bucket_region": "ap-northeast-1",
     Auth: {
-      identityPoolId: 'ap-northeast-1:141b0867-0b72-4a60-93b7-9ceddeb0f8d9', //REQUIRED - Amazon Cognito Identity Pool ID
+      identityPoolId: 'ap-northeast-1:4394e108-1e7d-449c-a1bb-a8a729ed4541', //REQUIRED - Amazon Cognito Identity Pool ID
       region: 'ap-northeast-1', // REQUIRED - Amazon Cognito Region
-      // userPoolId: 'ap-northeast-1_krUoox3yW', //OPTIONAL - Amazon Cognito User Pool ID
-      // userPoolWebClientId: 'rruh53etit2lj1h760u11nfb', //OPTIONAL - Amazon Cognito Web Client ID
     },
     Storage: {
       AWSS3: {
-          bucket: 'amplify-expoamplify-dev-192017-deployment', //REQUIRED -  Amazon S3 bucket name
+          bucket: 'amplify-pretapo-prod-121107-deployment', //REQUIRED -  Amazon S3 bucket name
           region: 'ap-northeast-1', //OPTIONAL -  Amazon service region
       }
     }
@@ -87,6 +89,12 @@ const SupportTabStack = createStackNavigator(
   }
 )
 
+const CreateTabStack = createStackNavigator(
+  {
+    '新規データ作成': { screen: CreateTab }
+  }
+)
+
 const Tab = createBottomTabNavigator(
   {
     'アイテム検索': {
@@ -95,11 +103,8 @@ const Tab = createBottomTabNavigator(
         tabBarIcon: ({ tintColor }) => <Icon size={24} name='search' color={tintColor} />
       }
     },
-    '画像投稿': {
-      screen: ImageTabStack,
-      navigationOptions: {
-        tabBarIcon: ({ tintColor }) => <Icon size={24} name='camera' color={tintColor} />
-      }
+    '新規データ作成': {
+      screen: CreateTabStack
     },
     '注文リスト': {
       screen: OrderTabStack,

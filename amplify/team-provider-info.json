@@ -1,19 +1,19 @@
 {
-  "dev": {
+  "prod": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-pretapoadmin-dev-105242-authRole",
-      "UnauthRoleArn": "arn:aws:iam::797806246810:role/amplify-pretapoadmin-dev-105242-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::797806246810:role/amplify-pretapoadmin-dev-105242-authRole",
+      "AuthRoleName": "amplify-pretapoadmin-prod-133058-authRole",
+      "UnauthRoleArn": "arn:aws:iam::797806246810:role/amplify-pretapoadmin-prod-133058-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::797806246810:role/amplify-pretapoadmin-prod-133058-authRole",
       "Region": "ap-northeast-1",
-      "DeploymentBucketName": "amplify-pretapoadmin-dev-105242-deployment",
-      "UnauthRoleName": "amplify-pretapoadmin-dev-105242-unauthRole",
-      "StackName": "amplify-pretapoadmin-dev-105242",
-      "StackId": "arn:aws:cloudformation:ap-northeast-1:797806246810:stack/amplify-pretapoadmin-dev-105242/7b2438d0-22f7-11eb-b738-067396fd8508",
-      "AmplifyAppId": "d2fq7q8nr8y2z"
+      "DeploymentBucketName": "amplify-pretapoadmin-prod-133058-deployment",
+      "UnauthRoleName": "amplify-pretapoadmin-prod-133058-unauthRole",
+      "StackName": "amplify-pretapoadmin-prod-133058",
+      "StackId": "arn:aws:cloudformation:ap-northeast-1:797806246810:stack/amplify-pretapoadmin-prod-133058/aaab0d40-4020-11eb-9ef5-067920afa4a6",
+      "AmplifyAppId": "d2hlpf6fv63q40"
     },
     "categories": {
       "auth": {
-        "pretapoadmin600fb63a": {}
+        "pretapoadmine208bc09": {}
       }
     }
   }
