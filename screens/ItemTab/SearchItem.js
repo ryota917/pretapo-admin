@@ -1,95 +1,352 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextInput } from 'react-native';
-import { API, graphqlOperation } from 'aws-amplify'
-import * as gqlQueries from '../../graphql/queries' // read
+import { Platform, StyleSheet, Image, View, FlatList, ActivityIndicator, SafeAreaView } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { API, graphqlOperation, Auth } from 'aws-amplify';
+import * as gqlQueries from 'pretapo-admin/graphql/queries.js' // read
 import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
-import Icon from 'react-native-vector-icons/Feather'
+import Item from './Item'
 
 export default class SearchItem extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            searchId: '',
-            alertVisible: false
+            searchCondition: [{color: ''}, {bigCategory: ''}, {size: ''}, {rank: ''}],
+            items: [],
+            nextToken: '',
+            canLoad: true,
+            isLoading: false,
+            isRefreshing: false,
         }
     }
 
-    static navigationOptions = () => ({
-        title: '品番検索'
-    })
-
-    searchId = async () => {
-        try {
-            const res = await API.graphql(graphqlOperation(gqlQueries.getItem, { id: this.state.searchId }))
-            const item = res.data.getItem
-            console.log(item)
-            if(item) {
-                this.props.navigation.navigate('ItemDetail', { item: item })
-            } else {
-                this.setState({ alertVisible: true })
-                setTimeout(() => this.setState({ alertVisible: false }), 3000)
+    static navigationOptions = ({navigation}) => {
+        return {
+            headerStyle: {
+                height: hp('7%')
             }
-        } catch(err) {
-            console.error(err)
         }
+    };
+
+    componentDidMount = async () => {
+        this.initialLoad()
+        //navigationのイベントリスナーでTabが押された時に毎回アイテム情報を取得する
+        await this.props.navigation.addListener('didFocus', async () => {
+            //awaitしないと前のstateで表示される
+            this.initialLoad()
+        })
+    }
+
+    loadQuery = () => {
+        const condition = this.state.searchCondition.filter(ele => Object.values(ele)[0].length )
+        const limitNum = condition.length
+        switch(limitNum) {
+            case 4:
+                const key41 = Object.keys(condition[0])
+                const key42 = Object.keys(condition[1])
+                const key43 = Object.keys(condition[2])
+                const key44 = Object.keys(condition[3])
+                return {
+                    filter: {
+                        and: {
+                            and: {
+                                and: {
+                                    and: {
+                                        [key41]: {
+                                            eq: condition[0][key41]
+                                        }
+                                    },
+                                    [key42]: {
+                                        eq: condition[1][key42]
+                                    }
+                                },
+                                [key43]: {
+                                    eq: condition[2][key43]
+                                }
+                            },
+                            [key44]: {
+                                eq: condition[3][key44]
+                            }
+                        },
+                        status: {
+                            eq: 'WAITING'
+                        }
+                    },
+                    limit: 30,
+                    nextToken: this.state.nextToken
+                }
+            case 3:
+                const key31 = Object.keys(condition[0])
+                const key32 = Object.keys(condition[1])
+                const key33 = Object.keys(condition[2])
+                return {
+                    filter: {
+                        and: {
+                            and: {
+                                and: {
+                                    [key31]: {
+                                        eq: condition[0][key31]
+                                    }
+                                },
+                                [key32]: {
+                                    eq: condition[1][key32]
+                                }
+                            },
+                            [key33]: {
+                                eq: condition[2][key33]
+                            }
+                        },
+                        status: {
+                            eq: 'WAITING'
+                        }
+                    },
+                    limit: 30,
+                    nextToken: this.state.nextToken
+                }
+                break;
+            case 2:
+                const key21 = Object.keys(condition[0])
+                const key22 = Object.keys(condition[1])
+                return {
+                    filter: {
+                        and: {
+                            and: {
+                                [key21]: {
+                                    eq: condition[0][key21]
+                                }
+                            },
+                            [key22]: {
+                                eq: condition[1][key22]
+                            }
+                        },
+                        status: {
+                            eq: 'WAITING'
+                        }
+                    },
+                    limit: 30,
+                    nextToken: this.state.nextToken
+                }
+                break;
+            case 1:
+                const key = Object.keys(condition[0])
+                return{
+                    filter: {
+                        and: {
+                            [key]: {
+                                eq: condition[0][key]
+                            },
+                            status: {
+                                eq: 'WAITING'
+                            }
+                        }
+                    },
+                    limit: 30,
+                    nextToken: this.state.nextToken
+                }
+                break;
+            case 0:
+                return {
+                    filter: {
+                        status: {
+                            eq: 'WAITING'
+                        }
+                    },
+                    limit: 30,
+                    nextToken: this.state.nextToken
+                }
+        }
+    }
+
+    initialQuery = () => {
+        const condition = this.state.searchCondition.filter(ele => Object.values(ele)[0].length )
+        const limitNum = condition.length
+        switch(limitNum) {
+            case 4:
+                const key41 = Object.keys(condition[0])
+                const key42 = Object.keys(condition[1])
+                const key43 = Object.keys(condition[2])
+                const key44 = Object.keys(condition[3])
+                return {
+                    filter: {
+                        and: {
+                            and: {
+                                and: {
+                                    and: {
+                                        [key41]: {
+                                            eq: condition[0][key41]
+                                        }
+                                    },
+                                    [key42]: {
+                                        eq: condition[1][key42]
+                                    }
+                                },
+                                [key43]: {
+                                    eq: condition[2][key43]
+                                }
+                            },
+                            [key44]: {
+                                eq: condition[3][key44]
+                            }
+                        },
+                    },
+                    limit: 30,
+                }
+            case 3:
+                const key31 = Object.keys(condition[0])
+                const key32 = Object.keys(condition[1])
+                const key33 = Object.keys(condition[2])
+                return {
+                    filter: {
+                        and: {
+                            and: {
+                                and: {
+                                    [key31]: {
+                                        eq: condition[0][key31]
+                                    }
+                                },
+                                [key32]: {
+                                    eq: condition[1][key32]
+                                }
+                            },
+                            [key33]: {
+                                eq: condition[2][key33]
+                            }
+                        },
+                    },
+                    limit: 30,
+                }
+                break;
+            case 2:
+                const key21 = Object.keys(condition[0])
+                const key22 = Object.keys(condition[1])
+                return {
+                    filter: {
+                        and: {
+                            and: {
+                                [key21]: {
+                                    eq: condition[0][key21]
+                                }
+                            },
+                            [key22]: {
+                                eq: condition[1][key22]
+                            }
+                        },
+                    },
+                    limit: 30,
+                }
+                break;
+            case 1:
+                const key = Object.keys(condition[0])
+                return{
+                    filter: {
+                        and: {
+                            [key]: {
+                                eq: condition[0][key]
+                            },
+                        }
+                    },
+                    limit: 30,
+                }
+                break;
+            case 0:
+                return {
+                    limit: 30,
+                }
+        }
+    }
+
+    initialLoad = async () => {
+        console.log('アイテム一覧初期ロード')
+        this.setState({ isLoading: true })
+        const query = await this.initialQuery()
+        const res = await API.graphql(graphqlOperation(gqlQueries.searchItems, query))
+        const canLoad = !!(res.data.searchItems.nextToken)
+        this.setState({
+            items: res.data.searchItems.items,
+            nextToken: res.data.searchItems.nextToken,
+            canLoad: canLoad,
+            isLoading: false
+        })
+    }
+
+    continueLoading = async () => {
+        console.log('アイテム一覧追加ローディング')
+        this.setState({ isLoading: true })
+        const query = await this.loadQuery()
+        const res = await API.graphql(graphqlOperation(gqlQueries.searchItems, query))
+        //You have a large list that is slow to update - make sure your renderItem function renders components that follow React performance best practices like PureComponent, shouldComponentUpdate, etc. Object
+        //このエラーが出るようであればパフォーマンス改善が必要
+        const canLoad = !!(res.data.searchItems.nextToken)
+        this.setState(prevState => ({
+            items: prevState.items.concat(res.data.searchItems.items),
+            nextToken: res.data.searchItems.nextToken,
+            canLoad: canLoad,
+            isLoading: false
+        }))
+    }
+
+    onRefresh = async () => {
+        this.setState({ isRefreshing: true })
+        await this.initialLoad()
+        this.setState({ isRefreshing: false })
+    }
+
+    toggleTutorial = () => {
+        this.setState({ isTutorialModalVisible: !this.state.isTutorialModalVisible })
     }
 
     render() {
-        const { searchId, alertVisible } = this.state
-        return(
-            <View style={styles.container}>
-                <View style={styles.innerContainer}>
-                    <View style={{ flexDirection: 'row', display: alertVisible ? 'block' : 'none', left: wp('20%'), bottom: hp('5%') }}>
-                        <Icon name='alert-circle' size={17} style={{ color: '#A60000' }} />
-                        <Text style={styles.alertText}>アイテムが存在しません</Text>
-                    </View>
-                    <View style={styles.searchContainer}>
-                        <TextInput
-                            style={styles.searchInput}
-                            onChangeText = {id => this.setState({ searchId: id })}
-                            placeholder='品番を入力してください'
-                            value={searchId}
+        const activityIndicator = <ActivityIndicator size='large' />
+        const {
+            canLoad,
+            items,
+            isLoading,
+            isRefreshing
+        } = this.state
+        return (
+            <SafeAreaView style={{ flex: 1 }}>
+                <FlatList
+                    refreshing={isRefreshing}
+                    onRefresh={() => this.onRefresh()}
+                    data={items}
+                    numColumns={3}
+                    columnWrapperStyle={styles.columnWrapperStyle}
+                    renderItem={({ item }) => (
+                        <Item
+                            detailPage='ItemDetail'
+                            item={item}
+                            navigation={this.props.navigation}
                         />
-                        <Icon
-                            name='search'
-                            size={30}
-                            onPress={() => this.searchId()}
-                            style={styles.icon}
-                        />
-                    </View>
-                </View>
-            </View>
-        )
+                    )}
+                    onEndReached={(canLoad && !isLoading) ? () => this.continueLoading() : () => null}
+                    onEndReachedThreshold={1}
+                    ListFooterComponent={canLoad ? activityIndicator : null}
+                    ListFooterComponentStyle={{ marginTop : hp('2%') }}
+                    initialNumToRender={9}
+                />
+            </SafeAreaView>
+        );
     }
 }
 
-const styles = StyleSheet.create({
-    container: {
-        width: wp('100%'),
-        height: hp("100%"),
-        backgroundColor: 'white'
-    },
-    innerContainer: {
-        height: hp('10%'),
-        marginTop: hp('25%')
-    },
-    alertText: {
-        marginLeft: wp('2%'),
-        color: '#A60000',
-        fontWeight: 'bold',
-        marginTop: 2
-    },
-    searchContainer: {
-        position: 'absolute',
-        left: wp('10%'),
-        flexDirection: 'row',
-        width: wp('80%')
-    },
-    searchInput: {
-        fontSize: 20
-    },
-    icon: {
-        position: 'absolute',
-        right: wp('0%')
-    }
-})
+let styles
+
+if(Platform.isPad) {
+    styles = StyleSheet.create({
+        logoImage :{
+            resizeMode: 'contain',
+            width: wp('20%'),
+            height: hp('8%')
+        }
+    })
+} else {
+    styles = StyleSheet.create({
+        logoImage: {
+            resizeMode: 'contain',
+            width: wp('23%'),
+            height: hp('10%')
+        },
+        columnWrapperStyle: {
+            marginBottom: 10
+        }
+    })
+}

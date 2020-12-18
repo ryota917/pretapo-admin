@@ -97,7 +97,7 @@ const CreateTabStack = createStackNavigator(
 
 const Tab = createBottomTabNavigator(
   {
-    'アイテム検索': {
+    'アイテム更新': {
       screen: ItemTabStack,
       navigationOptions: {
         tabBarIcon: ({ tintColor }) => <Icon size={24} name='search' color={tintColor} />

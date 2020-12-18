@@ -3,8 +3,9 @@ import { View, StyleSheet, Image, Text, TextInput, ScrollView, Button, Alert } f
 import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Swiper from 'react-native-swiper'
-import { API, graphqlOperation } from 'aws-amplify';
+import { API, graphqlOperation, Storage } from 'aws-amplify';
 import * as gqlMutations from '../../graphql/mutations'
+import * as ImagePicker from 'expo-image-picker'
 
 export default class ItemDetail extends React.Component {
     constructor(props) {
@@ -12,7 +13,8 @@ export default class ItemDetail extends React.Component {
         this.state = {
             item: this.props.navigation.state.params.item,
             description: this.props.navigation.state.params.item.description,
-            stateDescription: this.props.navigation.state.params.item.stateDescription
+            stateDescription: this.props.navigation.state.params.item.stateDescription,
+            images: []
         }
     }
 
@@ -35,8 +37,29 @@ export default class ItemDetail extends React.Component {
         const res = await API.graphql(graphqlOperation(gqlMutations.updateItem, {
             input: this.state.item
         }))
-        console.log(res)
         Alert.alert('アイテムデータが\n更新されました！')
+    }
+
+    //アップロードする画像を選択
+    pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowEditing: true,
+            aspect: [4, 3],
+            quality: 1
+        })
+
+        if(!result.cancelled) {
+            const res = await fetch(result.uri)
+            const blob = await res.blob()
+            this.setState({
+                images: [...this.state.images,
+                    {
+                        'blob': blob,
+                        'uri': result.uri
+                    }]
+            })
+        }
     }
 
     onPressCleaning = async () => {
@@ -59,19 +82,63 @@ export default class ItemDetail extends React.Component {
         }))
     }
 
+    deleteImage = idx => {
+        let updateImages = this.state.images.concat()
+        updateImages.splice(idx, 1)
+        this.setState({ images: updateImages})
+    }
+
+    //s3アップロード
+    uploadImage = async () => {
+        const { item, images } = this.state
+        try {
+            let imageURLsArr = []
+            //更新前のデータを削除する(更新後の画像枚数が更新前より少ない場合更新前の画像が残るためs3から更新前の画像数を取得してきて削除する)
+            const imageList = await Storage.list(item['id'] + '/')
+            imageList.map( async (imgList, idx) => {
+                await Storage.remove(imgList['key'])
+            } )
+            console.log('imageListです', imageList)
+            //for文で実行するとfor内が同期的処理される
+            for(let i = 0; i < images.length; i++) {
+                await Storage.put(
+                    item['id'] + '/' + i + '.JPG',
+                    images[i]['blob'],
+                    { contentType: 'image/jpeg' }
+                )
+                .then(result => {
+                    console.log(result)
+                    imageURLsArr.push('https://dz6mt8z4mgz4m.cloudfront.net/public/' + item['id'] + '/' + i + '.JPG')
+                })
+                .catch(err => console.error('アップロード時のエラーです', err))
+            }
+            //s3アップロードが終わったらアップロードしたURLにデータ修正
+            const res = await API.graphql(graphqlOperation(gqlMutations.updateItem, {
+                input: {
+                    id: item['id'],
+                    imageURLs: imageURLsArr
+                }
+            }))
+            //以前の画像データを削除
+            console.log('dynamoを更新しました', res)
+            Alert.alert('s3に画像をアップロードしました')
+        } catch(e) {
+            Alert.alert('エラーが発生しました')
+            console.error(e)
+        }
+    }
 
     render() {
-        const { searchId, item } = this.state
+        const { item, images } = this.state
         const prevItem = this.props.navigation.state.params.item
         const imagesDom = item.imageURLs.map((imgUrl, idx) =>
-            <Image key={idx} source={{ uri: imgUrl }} style={{ width: wp('100%'), height: wp('100%') }}/>
+            <Image key={idx} source={{ uri: imgUrl }} style={{ width: wp('100%'), height: wp('133%'), resizeMode: 'contain' }}/>
         )
         return(
             <View style={styles.container}>
                 <ScrollView style={styles.scrollView}>
                     <View style={styles.imagesView}>
                         <Swiper
-                            style={styles.swiper}
                             showButtons={true}
                             activeDotColor='#7389D9'
                             dotStyle={{ top: hp('7%')}}
@@ -79,6 +146,32 @@ export default class ItemDetail extends React.Component {
                         >
                             {imagesDom}
                         </Swiper>
+                    </View>
+                    <View style={{ marginTop: 20, marginBottom: 20 }}>
+                        <Text style={{ marginLeft: 20 }}>画像アップロード</Text>
+                        <View>
+                            {images.map((img, idx) =>
+                                <View style={{ flexDirection: 'row' }} key={idx}>
+                                    <Button
+                                        title='削除'
+                                        onPress={() => this.deleteImage(idx)}
+                                    />
+                                    <Image
+                                        source={{ uri: img['uri'] }}
+                                        style={{ width: wp('13%'), height: wp('13%'), margin: 5 }}
+                                        key={idx}
+                                    />
+                                </View>
+                            )}
+                        </View>
+                        <Button
+                            title='写真を投稿する'
+                            onPress={this.pickImage}
+                        />
+                        <Button
+                            title='画像を更新する'
+                            onPress={this.uploadImage}
+                        />
                     </View>
                     <View style={styles.flexView}>
                         <View style={styles.dataView}>
@@ -279,8 +372,8 @@ const styles = StyleSheet.create({
     },
     imagesView: {
         width: wp('100%'),
-        height: wp('80%'),
-        marginBottom: hp('4%')
+        height: wp('133%'),
+        marginBottom: 30
     },
     flexView: {
         flexDirection: 'row'

@@ -49,11 +49,9 @@ export const CreateTab = () => {
             quality: 1
         })
 
-
-        const res = await fetch(result.uri)
-        const blob = await res.blob()
-
         if(!result.cancelled) {
+            const res = await fetch(result.uri)
+            const blob = await res.blob()
             setImageURLs([...imageURLs,
                 {
                     'blob': blob,
@@ -103,7 +101,7 @@ export const CreateTab = () => {
     }
 
     return(
-        <SafeAreaView>
+        <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.container}>
                 <ScrollView style={styles.scrollView}>
                     <View style={{ marginTop: 30 }}>
