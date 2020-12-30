@@ -6,7 +6,8 @@ import { API, graphqlOperation, Storage } from 'aws-amplify';
 import * as gqlMutations from '../../graphql/mutations'
 import * as ImagePicker from 'expo-image-picker'
 import {useForm, Controller} from 'react-hook-form' 
-import RNpickerSelect from 'react-native-picker-select'
+// import {Picker} from 'react-native'
+// import RNpickerSelect from 'react-native-picker-select'
 import { FlatList } from 'react-native-gesture-handler';
 
 export const CreateTab = () => {
@@ -166,7 +167,7 @@ export const CreateTab = () => {
                     <View style={styles.flexView}>
                         <View style={styles.dataView}>
                             <Text style={styles.dataText}>ステータス</Text>
-                            <Controller
+                            {/* <Controller
                                 control={control}
                                 render={({ onChange, onBlur, value }) => {
                                     return(
@@ -188,12 +189,12 @@ export const CreateTab = () => {
                                 onChangeName={'onValueChange'}
                                 valueName={'selectedValue'}
                                 defaultValue='UNDONE'
-                            />
+                            /> */}
                         </View>
                         <Text>ハロー</Text>
                         <View style={styles.dataView}>
                             <Text style={styles.dataText}>ランク</Text>
-                            <Controller
+                            {/* <Controller
                                 control={control}
                                 render={({ onChange, onBlur, value }) => {
                                     return(
@@ -215,7 +216,7 @@ export const CreateTab = () => {
                                 onChangeName={'onValueChange'}
                                 valueName={'selectedValue'}
                                 defaultValue='A'
-                            />
+                            /> */}
                         </View>
                     </View>
                     <View style={styles.flexView}>
