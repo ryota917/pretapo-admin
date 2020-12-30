@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
 import { View, Text, SafeAreaView, StyleSheet, ScrollView, TextInput, Button, Image, Alert } from 'react-native'
+import CheckBox from 'react-native-check-box'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import { API, graphqlOperation, Storage } from 'aws-amplify';
 import * as gqlMutations from '../../graphql/mutations'
 import * as ImagePicker from 'expo-image-picker'
+import {useForm, Controller} from 'react-hook-form' 
+import RNpickerSelect from 'react-native-picker-select'
 import { FlatList } from 'react-native-gesture-handler';
 
 export const CreateTab = () => {
@@ -100,6 +103,16 @@ export const CreateTab = () => {
         setImageURLs(updateImageURLs)
     }
 
+    const { control, handleSubmit, errors } = useForm()
+    const rules = {
+        name: {required: true}
+    }
+    const onChange = args => {
+        return {
+          selectedValue: args,
+        };
+      };
+
     return(
         <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.container}>
@@ -132,79 +145,170 @@ export const CreateTab = () => {
                     </View>
                     <View style={styles.flexView}>
                         <View style={styles.dataView}>
-                            <Text style={styles.dataText}>品番</Text>
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(id) => onChangeData('id', id)}
-                            />
-                        </View>
-                        <View style={styles.dataView}>
-                            <Text style={styles.dataText}>アイテム名</Text>
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(name) => onChangeData('name', name)}
-                                multiline={true}
+                            <Text style={styles.dataText}>名前</Text>
+                            <Controller
+                                control={control}
+                                render={({ onChange, onBlur, value }) => {
+                                    return(
+                                        <TextInput
+                                            style={styles.dataInput}
+                                            onChangeText={(data) => onChange(data)}
+                                            multiline={true}
+                                        />
+                                    )
+                                }}
+                                name='name'
+                                defaultValue='sample'
+                                rules = {rules.name}
                             />
                         </View>
                     </View>
                     <View style={styles.flexView}>
                         <View style={styles.dataView}>
                             <Text style={styles.dataText}>ステータス</Text>
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(status) => onChangeData('status', status)}
+                            <Controller
+                                control={control}
+                                render={({ onChange, onBlur, value }) => {
+                                    return(
+                                        <RNpickerSelect
+                                            onValueChange={value => onChange(value)}
+                                            items={[
+                                                { label:'A', value:'A'},
+                                                { label:'B', value:'B'},
+                                                { label:'C', value:'C'},
+                                                { label:'D', value:'D'},
+                                                { label:'E', value:'E'},
+                                                { label:'F', value:'F'}
+
+                                            ]}
+                                        />
+                                    )
+                                }}
+                                name='status' 
+                                onChangeName={'onValueChange'}
+                                valueName={'selectedValue'}
+                                defaultValue='UNDONE'
                             />
                         </View>
+                        <Text>ハロー</Text>
                         <View style={styles.dataView}>
                             <Text style={styles.dataText}>ランク</Text>
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(rank) => onChangeData('rank', rank)}
+                            <Controller
+                                control={control}
+                                render={({ onChange, onBlur, value }) => {
+                                    return(
+                                        <RNpickerSelect
+                                            onValueChange={value => onChange(value)}
+                                            items={[
+                                                { label:'A', value:'A'},
+                                                { label:'B', value:'B'},
+                                                { label:'C', value:'C'},
+                                                { label:'D', value:'D'},
+                                                { label:'E', value:'E'},
+                                                { label:'F', value:'F'}
+
+                                            ]}
+                                        />
+                                    )
+                                }}
+                                name='rank' 
+                                onChangeName={'onValueChange'}
+                                valueName={'selectedValue'}
+                                defaultValue='A'
                             />
                         </View>
                     </View>
                     <View style={styles.flexView}>
                         <View style={styles.dataView}>
                             <Text style={styles.dataText}>季節</Text>
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(season) => onChangeMultiData('season', season, 0)}
+                            <Controller
+                                control={control}
+                                render={({ onChange, onBlur, value }) => {
+                                    return(
+                                        <CheckBox
+                                            onClick={()=>{console.log(value);onChange(!value)}}
+                                            isChecked={!!value}
+                                        />
+                                    )
+                                }}
+                                name='isSpring'
+                                defaultValue={false}
                             />
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(season) => onChangeMultiData('season', season, 1)}
+                            <Controller
+                                control={control}
+                                render={({ onChange, onBlur, value }) => {
+                                    return(
+                                        <CheckBox
+                                            onClick={()=>{console.log(value);onChange(!value)}}
+                                            isChecked={!!value}
+                                        />
+                                    )
+                                }}
+                                name='isSummer'
+                                defaultValue={false}
                             />
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(season) => onChangeMultiData('season', season, 2)}
+                            <Controller
+                                control={control}
+                                render={({ onChange, onBlur, value }) => {
+                                    return(
+                                        <CheckBox
+                                            onClick={()=>{console.log(value);onChange(!value)}}
+                                            isChecked={!!value}
+                                        />
+                                    )
+                                }}
+                                name='isAutumn'
+                                defaultValue={false}
                             />
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(season) => onChangeMultiData('season', season, 3)}
+                            <Controller
+                                control={control}
+                                render={({ onChange, onBlur, value }) => {
+                                    return(
+                                        <CheckBox
+                                            onClick={()=>{console.log(value);onChange(!value)}}
+                                            isChecked={!!value}
+                                        />
+                                    )
+                                }}
+                                name='isWinter'
+                                defaultValue={false}
                             />
                         </View>
                         <View style={styles.dataView}>
                             <Text style={styles.dataText}>ブランド</Text>
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(brand) => onChangeData('brand', brand)}
+                            <Controller
+                                control={control}
+                                render={({ onChange, onBlur, value }) => {
+                                    return(
+                                        <TextInput
+                                            style={styles.dataInput}
+                                            onChangeText={(data) => onChange(data)}
+                                            multiline={true}
+                                        />
+                                    )
+                                }}
+                                name='brandName'
+                                defaultValue={'no brand'}
                             />
                         </View>
                     </View>
                     <View style={styles.flexView}>
                         <View style={styles.dataView}>
                             <Text style={styles.dataText}>カラー</Text>
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(color) => onChangeMultiData('color', color, 0)}
-                            />
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(color) => onChangeMultiData('color', color, 1)}
-                            />
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(color) => onChangeMultiData('color', color, 2)}
+                            <Controller
+                                control={control}
+                                render={({ onChange, onBlur, value }) => {
+                                    return(
+                                        <TextInput
+                                            style={styles.dataInput}
+                                            onChangeText={(data) => onChange(data)}
+                                            multiline={true}
+                                        />
+                                    )
+                                }}
+                                name='name'
+                                defaultValue='sample'
+                                rules = {rules.name}
                             />
                         </View>
                         <View style={styles.dataView}>
@@ -325,15 +429,27 @@ export const CreateTab = () => {
                     </View>
                     <View style={styles.descriptionView}>
                         <Text style={styles.descriptionText}>アイテム状態説明</Text>
-                        <TextInput
-                            style={styles.descriptionInput}
-                            onChangeText={(stateDescription) => onChangeData('stateDescription', stateDescription)}
-                            multiline={true}
-                        />
+                        <Controller
+                                control={control}
+                                render={({ onChange, onBlur, value }) => {
+                                    return(
+                                        <TextInput
+                                            style={styles.dataInput}
+                                            onChangeText={(data) => onChange(data)}
+                                            multiline={true}
+                                        />
+                                        )
+                                }}
+                                name='item_state_expression'
+                                rules = {{ required: true, minLength: 5}}
+                                defaultValue='test'
+                            />
+                            <Text>{errors.item_state_expression?.type === "minLength" && 'Your input is required'}</Text>
                     </View>
                     <Button
                         title='作成'
-                        onPress={createItem}
+                        // onPress={handleSubmit(createItem)}
+                        onPress={handleSubmit((value) => console.log(value))}
                     />
                     <View style={{ height: hp('30%') }}></View>
                 </ScrollView>
