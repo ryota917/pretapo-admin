@@ -1,20 +1,25 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, SafeAreaView, StyleSheet, ScrollView, TextInput, Button, Image, Alert } from 'react-native'
-import CheckBox from 'react-native-check-box'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import { API, graphqlOperation, Storage } from 'aws-amplify';
 import * as gqlMutations from '../../graphql/mutations'
 import * as ImagePicker from 'expo-image-picker'
 import {useForm, Controller} from 'react-hook-form' 
 import Icon from 'react-native-vector-icons/Feather';
-// import {Picker} from 'react-native'
-// import RNpickerSelect from 'react-native-picker-select'
+import TopsForm from './Forms/TopsForm'
+import BottomsForm from './Forms/BottomsForm'
+import DropDownModal from './Forms/DropDown'
+import SeasonSelectForm from './Forms/SeasonSelectForm'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { FlatList } from 'react-native-gesture-handler';
+
+
+
 
 export const CreateTab = () => {
     const [item, setItem] = useState({})
     const [imageURLs, setImageURLs] = useState([])
+    
 
     //データ作成
     const createItem = async () => {
@@ -107,9 +112,29 @@ export const CreateTab = () => {
     }
 
     // const { handleSubmit, errors, watch, trigger } = useForm()
-    const { control, register, watch,errors, handleSubmit, trigger } = useForm({mode:'onBlur'});
+    const { control, register, watch,errors, handleSubmit, trigger ,getValues} = useForm({mode:'onSubmit'});
     const initialBigCategory = 'TOPS'
     const [ bigCategory, changeBigCategory ] = useState(initialBigCategory) //bigCategoryごとにフォームの項目を変化させたかったので
+    const [topsData, setTopsData] = useState({})
+    const [bottomsData, setBottomsData] = useState({})
+    const formProperties = {
+        control: control,
+        watch: watch,
+        errors: errors,
+        getValues: getValues
+    }
+
+    const onSubmit = () => {
+        const formData = getValues()
+        const itemData = {
+            ...formData,
+        };
+        trigger();
+        console.log('pressd　submit button')
+        console.log('itemdata',itemData)
+        console.log(errors)
+        
+    }
 
     return(
         <SafeAreaView style={{ flex: 1 }}>
@@ -144,24 +169,23 @@ export const CreateTab = () => {
                     <View style={styles.flexView}>
                         <View style={styles.dataView}>
                             <Text style={styles.dataText}>名前</Text>
+                            <Text>{(errors.name?.type === "required") && '商品名は必須項目です。'}</Text>
                             <Controller
                                 control={control}
                                 render={({ onChange, onBlur, value }) => {
                                     return(
                                         <TextInput
                                             style={styles.dataInput}
-                                            onChangeText={(data) => {onChange(data);trigger('name')}}
+                                            onChangeText={(data) => {onChange(data)}}
                                             multiline={true}
-                                            onBlur={()=>{console.log(errors.name)}}
                                             value={value}
                                         />
                                     )
                                 }}
                                 name='name'
-                                defaultValue='as'
-                                rules = {{required: true, maxLength: 10}}
+                                defaultValue=''
+                                rules = {{required: true}}
                             />
-                            {errors.name && <Text>入力してください。</Text>}
                         </View>
                     </View>
                     <View style={styles.flexView}>
@@ -171,17 +195,16 @@ export const CreateTab = () => {
                                 control={control}
                                 render={({ onChange, onBlur, value }) => {
                                     return(
-                                        <DropDownPicker
-                                            items={[
-                                                {label: '購入可能', value: 'WAITING', icon: () => <Icon name="flag" size={18} color="#900" />, hidden: true},
-                                                {label: '発送中', value: 'SHIPPING', icon: () => <Icon name="flag" size={18} color="#900" />},
-                                                {label: '画像なし', value: 'UNDONE', icon: () => <Icon name="flag" size={18} color="#900" />},
-                                            ]}
-                                            defaultValue={value}
-                                            containerStyle={{height: 40}}
-                                            style={{ backgroundColor: '#ffffff' }}
-                                            dropDownStyle={{ backgroundColor: 'white' }}
-                                            onChangeItem={item => {onChange(item.value)}}
+                                        <DropDownModal 
+                                            onPress={v => onChange(v)}
+                                            initialValue={value}
+                                            dropDownOptions={
+                                                [
+                                                    {label: '購入可能', value: 'WAITING', icon: () => <Icon name="flag" size={18} color="#900" />, hidden: true},
+                                                    {label: '発送中', value: 'SHIPPING', icon: () => <Icon name="flag" size={18} color="#900" />},
+                                                    {label: '画像なし', value: 'UNDONE', icon: () => <Icon name="flag" size={18} color="#900" />},
+                                                ]
+                                            }
                                         />
                                     )
                                 }}
@@ -191,95 +214,33 @@ export const CreateTab = () => {
                                 defaultValue='WAITING'
                             />
                         </View>
-                        <View style={styles.dataView}>
+                        <View style={styles.dataView2}>
                             <Text style={styles.dataText}>ランク</Text>
                             <Controller
                                 control={control}
                                 render={({ onChange, onBlur, value }) => {
                                     return(
-                                        <DropDownPicker
-                                            items={[
-                                                {label: 'A', value: 'A', icon: () => <Icon name="flag" size={18} color="#900" />, hidden: true},
-                                                {label: 'B', value: 'B', icon: () => <Icon name="flag" size={18} color="#900" />},
-                                                {label: 'C', value: 'C', icon: () => <Icon name="flag" size={18} color="#900" />},
-                                            ]}
-                                            defaultValue={value}
-                                            containerStyle={{height: 40}}
-                                            style={{ backgroundColor: '#ffffff' }}
-                                            dropDownStyle={{ backgroundColor: 'white' }}
-                                            onChangeItem={item => {onChange(item.value)}}
+                                        <DropDownModal 
+                                            onPress={v => onChange(v)}
+                                            initialValue={value}
+                                            dropDownOptions={
+                                                [
+                                                    {label:'A', value:'A'},
+                                                    {label:'B', value:'B'},
+                                                    {label:'C', value:'C'},
+                                                ]
+                                            }
                                         />
                                     )
                                 }}
                                 name='rank' 
                                 onChangeName={'onChangeItem'}
-                                valueName={'selectedValue'}
+                                // valueName={'selectedValue'}
                                 defaultValue='A'
                             />
                         </View>
                     </View>
                     <View style={styles.flexView}>
-                        <View style={styles.dataView}>
-                            <Text style={styles.dataText}>季節</Text>
-                            <View style={styles.flexView}>
-                                <Text>春</Text>
-                                <Controller
-                                    control={control}
-                                    render={({ onChange, onBlur, value }) => {
-                                        return(
-                                            <CheckBox
-                                                onClick={()=>{console.log(value);onChange(!value)}}
-                                                isChecked={!!value}
-                                            />
-                                        )
-                                    }}
-                                    name='isSpring'
-                                    defaultValue={false}
-                                />
-                                <Text>夏</Text>
-                                <Controller
-                                    control={control}
-                                    render={({ onChange, onBlur, value }) => {
-                                        return(
-                                            <CheckBox
-                                                onClick={()=>{console.log(value);onChange(!value)}}
-                                                isChecked={!!value}
-                                            />
-                                        )
-                                    }}
-                                    name='isSummer'
-                                    defaultValue={false}
-                                />
-                                <Text>秋</Text>
-                                <Controller
-                                    control={control}
-                                    render={({ onChange, onBlur, value }) => {
-                                        return(
-                                            <CheckBox
-                                                onClick={()=>{console.log(value);onChange(!value)}}
-                                                isChecked={!!value}
-                                            />
-                                        )
-                                    }}
-                                    name='isAutumn'
-                                    defaultValue={false}
-                                />
-                                <Text>冬</Text>
-                                <Controller
-                                    control={control}
-                                    render={({ onChange, onBlur, value }) => {
-                                        return(
-                                            <CheckBox
-                                                onClick={()=>{console.log(value);onChange(!value)}}
-                                                isChecked={!!value}
-                                            />
-                                        )
-                                    }}
-                                    name='isWinter'
-                                    defaultValue={false}
-                                />
-                            </View>
-                        </View>
                         <View style={styles.dataView}>
                             <Text style={styles.dataText}>ブランド</Text>
                             <Controller
@@ -312,7 +273,7 @@ export const CreateTab = () => {
                                         />
                                     )
                                 }}
-                                name='name'
+                                name='color'
                                 defaultValue='sample'
                             />
                         </View>
@@ -334,6 +295,11 @@ export const CreateTab = () => {
                             />
                         </View>
                     </View>
+                    <SeasonSelectForm
+                        style={styles}
+                        formProperties={formProperties}
+                        Controller={Controller}
+                    />
                     <View style={styles.flexView}>
                         <View style={styles.dataView}>
                             <Text style={styles.dataText}>サイズ</Text>
@@ -345,7 +311,6 @@ export const CreateTab = () => {
                                             style={styles.dataInput}
                                             onChangeText={(data) => onChange(data)}
                                             multiline={true}
-                                            onBlur={() => {console.log(bigCategory)}}
                                         />
                                     )
                                 }}
@@ -371,55 +336,23 @@ export const CreateTab = () => {
                                 control={control}
                                 render={({ onChange, onBlur, value }) => {
                                     return(
-                                        <DropDownPicker
-                                            items={[
-                                                {label: 'トップス', value: 'TOPS', icon: () => <Icon name="flag" size={18} color="#900" />, hidden: true},
-                                                {label: 'ボトムス', value: 'BOTTOMS', icon: () => <Icon name="flag" size={18} color="#900" />},
-                                            ]}
-                                            defaultValue={'TOPS'}
-                                            containerStyle={{height: 40}}
-                                            style={{ backgroundColor: '#ffffff' }}
-                                            dropDownStyle={{ backgroundColor: 'white' }}
-                                            onChangeItem={item => {onChange(item.value);changeBigCategory(watch('bigCategory'))}}
+                                        <DropDownModal 
+                                            onPress={v => {onChange(v);changeBigCategory(v)}}
+                                            initialValue={value}
+                                            dropDownOptions={
+                                                [
+                                                    {label:'トップス', value:'TOPS'},
+                                                    {label:'ボトムス', value:'BOTTOMS'},
+                                                ]
+                                            }
                                         />
                                     )
                                 }}
                                 name='bigCategory' 
-                                onChangeName={'onChangeItem'}
+                                onChangeName={'onPress'}
                                 // valueName={'selectedValue'}
                                 defaultValue='TOPS'
-                                
                             />
-                        {watch('bigCategory')==='TOPS' && (<View>
-                            <Text style={styles.topsText}>トップス</Text>
-                    <View style={styles.flexView}>
-                        <View style={styles.dataView}>
-                            <Text style={styles.dataText}>着丈</Text>
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(dressLength) => onChangeData('dressLength', dressLength)}
-                            />
-                        </View>
-                        <View style={styles.dataView}>
-                            <Text style={styles.dataText}>身幅</Text>
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(dressWidth) => onChangeData('dressWidth', dressWidth)}
-                            />
-                        </View>
-                    </View>
-                    <View style={styles.flexView}>
-                        <View style={styles.dataView}>
-                            <Text style={styles.dataText}>袖丈</Text>
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(sleeveLength) => onChangeData('sleeveLength', sleeveLength)}
-                            />
-                        </View>
-                    </View>
-                        </View>)}
-                        </View>
-                        <View style={styles.dataView}>
                             <Text style={styles.dataText}>小カテゴリ</Text>
                             <TextInput
                                 style={styles.dataInput}
@@ -427,49 +360,8 @@ export const CreateTab = () => {
                             />
                         </View>
                     </View>
-                    {watch('bigCategory')==='BOTTOMS' && (<View>
-                        <Text style={styles.bottomText}>ボトムス</Text>
-                        <View style={styles.flexView}>
-                            <View style={styles.dataView}>
-                                <Text style={styles.dataText}>ウエスト</Text>
-                                <TextInput
-                                    style={styles.dataInput}
-                                    onChangeText={(waist) => onChangeData('waist', waist)}
-                                />
-                            </View>
-                            <View style={styles.dataView}>
-                                <Text style={styles.dataText}>股上</Text>
-                                <TextInput
-                                    style={styles.dataInput}
-                                    onChangeText={(rise) => onChangeData('rise', rise)}
-                                />
-                            </View>
-                        </View>
-                        <View style={styles.flexView}>
-                            <View style={styles.dataView}>
-                                <Text style={styles.dataText}>ヒップ</Text>
-                                <TextInput
-                                    style={styles.dataInput}
-                                    onChangeText={(hip) => onChangeData('hip', hip)}
-                                />
-                            </View>
-                            <View style={styles.dataView}>
-                                <Text style={styles.dataText}>股下</Text>
-                                <TextInput
-                                    style={styles.dataInput}
-                                    onChangeText={(inseam) => onChangeData('inseam', inseam)}
-                                />
-                            </View>
-                        </View>
-                        <View style={styles.flexView}>
-                            <View style={styles.dataView}>
-                                <Text style={styles.dataText}>裾幅</Text>
-                                <TextInput
-                                    style={styles.dataInput}
-                                    onChangeText={(hemWidth) => onChangeData('hemWidth', hemWidth)}
-                                />
-                            </View>
-                    </View></View>)}
+                    {bigCategory==='TOPS' && (<TopsForm style={styles} formProperties={formProperties} Controller={Controller}/>)}
+                    {bigCategory==='BOTTOMS' && (<BottomsForm style={styles} formProperties={formProperties} Controller={Controller}/>)}
 
                     
                     <View style={styles.descriptionView}>
@@ -490,7 +382,7 @@ export const CreateTab = () => {
                                             // style={styles.dataInput}
                                             onChangeText={(data) => onChange(data)}
                                             multiline={true}
-                                            onBlur={()=>{onBlur();console.log(errors)}}
+                                            onBlur={()=>{onBlur()}}
                                             // error={errors.item_state_expression}
                                             // errorText={errors?.item_state_expression?.message}
                                         />
@@ -499,14 +391,13 @@ export const CreateTab = () => {
                                 name='item_state_expression'
                                 rules={{required: true ,minLength:5}}
                                 defaultValue='test'
-                                
-                                
                             />
-                            {/* <Text>{(errors.item_state_expression?.type === "minLength") && 'Your input is required'}</Text> */}
+                            <Text>{(errors.item_state_expression?.type === "minLength") && 'Your input is required'}</Text>
                     </View>
                     <Button
                         title='作成'
-                        onPress={handleSubmit((value) => console.log(value))}
+                        // onPress={handleSubmit((value) => {console.log(errors)})}
+                        onPress={()=> {trigger();handleSubmit(onSubmit);console.log('errors',errors)}}
                     />
                     <View style={{ height: hp('30%') }}></View>
                 </ScrollView>
@@ -536,13 +427,15 @@ const styles = StyleSheet.create({
     dataView: {
         width: wp('40%'),
         marginLeft: wp('5%'),
-        marginTop: hp('3%')
+        marginTop: hp('3%'),
+        zIndex: 1
     },
     dataView2: {
         width: wp('40%'),
         marginLeft: wp('5%'),
         marginTop: hp('3%'),
-        marginBottom: hp('10%')
+        zIndex:5000
+        // marginBottom: hp('10%')
     },
     dataText: {
         fontSize: 13,
