@@ -2,7 +2,7 @@ import React from 'react';
 import { Platform, StyleSheet, Image, View, FlatList, ActivityIndicator, SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { API, graphqlOperation, Auth } from 'aws-amplify';
-import * as gqlQueries from '../../graphql/queries' // read
+import * as gqlQueries from 'pretapo-admin/graphql/queries' // read
 import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import Item from './Item'
 
