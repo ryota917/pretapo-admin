@@ -123,23 +123,19 @@ export const CreateTab = () => {
         errors: errors,
         getValues: getValues
     }
-
-    const onSubmit = () => {
-        const formData = getValues()
+    const onError = (errors, e) => console.log('error',errors);
+    const onSubmit = (formData, e) => {
         const itemData = {
             ...formData,
         };
-        trigger();
-        console.log('pressd　submit button')
         console.log('itemdata',itemData)
-        console.log(errors)
         
     }
 
     return(
         <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.container}>
-                <ScrollView style={styles.scrollView}>
+                <ScrollView style={styles.scrollView} keyboardShouldPersistTaps={'always'}>
                     <View style={{ marginTop: 30 }}>
                         <Text style={{ marginLeft: 20 }}>画像アップロード</Text>
                         <View>
@@ -323,9 +319,20 @@ export const CreateTab = () => {
                         </View>
                         <View style={styles.dataView}>
                             <Text style={styles.dataText}>仕入れ先</Text>
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(supplierName) => onChangeData('supplierName', supplierName)}
+                            <Controller
+                                control={control}
+                                render={({ onChange, onBlur, value }) => {
+                                    return(
+                                        <TextInput
+                                            style={styles.dataInput}
+                                            onChangeText={(data) => onChange(data)}
+                                            multiline={true}
+                                        />
+                                    )
+                                }}
+                                name='supplierName'
+                                defaultValue={'S'}
+                                rules={{required: true, pattern: /(S|M|L|XL)/}}
                             />
                         </View>
                     </View>
@@ -354,9 +361,20 @@ export const CreateTab = () => {
                                 defaultValue='TOPS'
                             />
                             <Text style={styles.dataText}>小カテゴリ</Text>
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(smallCategory) => onChangeMultiData('smallCategory', smallCategory, 0)}
+                            <Controller
+                                control={control}
+                                render={({ onChange, onBlur, value }) => {
+                                    return(
+                                        <TextInput
+                                            style={styles.descriptionInput}
+                                            onChangeText={(smallCategory) => onChange(smallCategory)}
+                                            multiline={true}
+                                        />
+                                    )
+                                }}
+                                name='smallCategory'
+                                rules={{required: true }}
+                                defaultValue='test'
                             />
                         </View>
                     </View>
@@ -366,11 +384,21 @@ export const CreateTab = () => {
                     
                     <View style={styles.descriptionView}>
                         <Text style={styles.descriptionText}>アイテム説明</Text>
-                        <TextInput
-                            style={styles.descriptionInput}
-                            // onChangeText={(description) => onChange(description)}
-                            multiline={true}
-                        />
+                        <Controller
+                                control={control}
+                                render={({ onChange, onBlur, value }) => {
+                                    return(
+                                        <TextInput
+                                            style={styles.descriptionInput}
+                                            onChangeText={(description) => onChange(description)}
+                                            multiline={true}
+                                        />
+                                    )
+                                }}
+                                name='item_description'
+                                rules={{required: true }}
+                                defaultValue='test'
+                            />
                     </View>
                     <View style={styles.descriptionView}>
                         <Text style={styles.descriptionText}>アイテム状態説明</Text>
@@ -379,25 +407,23 @@ export const CreateTab = () => {
                                 render={({ onChange, onBlur, value }) => {
                                     return(
                                         <TextInput
-                                            // style={styles.dataInput}
                                             onChangeText={(data) => onChange(data)}
                                             multiline={true}
                                             onBlur={()=>{onBlur()}}
-                                            // error={errors.item_state_expression}
-                                            // errorText={errors?.item_state_expression?.message}
                                         />
                                         )
                                 }}
                                 name='item_state_expression'
-                                rules={{required: true ,minLength:5}}
+                                rules={{required: true}}
                                 defaultValue='test'
                             />
                             <Text>{(errors.item_state_expression?.type === "minLength") && 'Your input is required'}</Text>
                     </View>
                     <Button
                         title='作成'
+                        type='submit'
                         // onPress={handleSubmit((value) => {console.log(errors)})}
-                        onPress={()=> {trigger();handleSubmit(onSubmit);console.log('errors',errors)}}
+                        onPress={(handleSubmit(onSubmit, onError))}
                     />
                     <View style={{ height: hp('30%') }}></View>
                 </ScrollView>
