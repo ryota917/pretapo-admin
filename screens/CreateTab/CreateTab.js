@@ -1,14 +1,25 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, SafeAreaView, StyleSheet, ScrollView, TextInput, Button, Image, Alert } from 'react-native'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import { API, graphqlOperation, Storage } from 'aws-amplify';
 import * as gqlMutations from '../../graphql/mutations'
 import * as ImagePicker from 'expo-image-picker'
+import {useForm, Controller} from 'react-hook-form' 
+import Icon from 'react-native-vector-icons/Feather';
+import TopsForm from './Forms/TopsForm'
+import BottomsForm from './Forms/BottomsForm'
+import DropDownModal from './Forms/DropDown'
+import SeasonSelectForm from './Forms/SeasonSelectForm'
+import DropDownPicker from 'react-native-dropdown-picker';
 import { FlatList } from 'react-native-gesture-handler';
+
+
+
 
 export const CreateTab = () => {
     const [item, setItem] = useState({})
     const [imageURLs, setImageURLs] = useState([])
+    
 
     //データ作成
     const createItem = async () => {
@@ -100,6 +111,31 @@ export const CreateTab = () => {
         setImageURLs(updateImageURLs)
     }
 
+    // const { handleSubmit, errors, watch, trigger } = useForm()
+    const { control, register, watch,errors, handleSubmit, trigger ,getValues} = useForm({mode:'onSubmit'});
+    const initialBigCategory = 'TOPS'
+    const [ bigCategory, changeBigCategory ] = useState(initialBigCategory) //bigCategoryごとにフォームの項目を変化させたかったので
+    const [topsData, setTopsData] = useState({})
+    const [bottomsData, setBottomsData] = useState({})
+    const formProperties = {
+        control: control,
+        watch: watch,
+        errors: errors,
+        getValues: getValues
+    }
+
+    const onSubmit = () => {
+        const formData = getValues()
+        const itemData = {
+            ...formData,
+        };
+        trigger();
+        console.log('pressd　submit button')
+        console.log('itemdata',itemData)
+        console.log(errors)
+        
+    }
+
     return(
         <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.container}>
@@ -132,112 +168,158 @@ export const CreateTab = () => {
                     </View>
                     <View style={styles.flexView}>
                         <View style={styles.dataView}>
-                            <Text style={styles.dataText}>品番</Text>
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(id) => onChangeData('id', id)}
-                            />
-                        </View>
-                        <View style={styles.dataView}>
-                            <Text style={styles.dataText}>アイテム名</Text>
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(name) => onChangeData('name', name)}
-                                multiline={true}
+                            <Text style={styles.dataText}>名前</Text>
+                            <Text>{(errors.name?.type === "required") && '商品名は必須項目です。'}</Text>
+                            <Controller
+                                control={control}
+                                render={({ onChange, onBlur, value }) => {
+                                    return(
+                                        <TextInput
+                                            style={styles.dataInput}
+                                            onChangeText={(data) => {onChange(data)}}
+                                            multiline={true}
+                                            value={value}
+                                        />
+                                    )
+                                }}
+                                name='name'
+                                defaultValue=''
+                                rules = {{required: true}}
                             />
                         </View>
                     </View>
                     <View style={styles.flexView}>
-                        <View style={styles.dataView}>
+                        <View style={styles.dataView2}>
                             <Text style={styles.dataText}>ステータス</Text>
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(status) => onChangeData('status', status)}
+                            <Controller
+                                control={control}
+                                render={({ onChange, onBlur, value }) => {
+                                    return(
+                                        <DropDownModal 
+                                            onPress={v => onChange(v)}
+                                            initialValue={value}
+                                            dropDownOptions={
+                                                [
+                                                    {label: '購入可能', value: 'WAITING', icon: () => <Icon name="flag" size={18} color="#900" />, hidden: true},
+                                                    {label: '発送中', value: 'SHIPPING', icon: () => <Icon name="flag" size={18} color="#900" />},
+                                                    {label: '画像なし', value: 'UNDONE', icon: () => <Icon name="flag" size={18} color="#900" />},
+                                                ]
+                                            }
+                                        />
+                                    )
+                                }}
+                                name='status' 
+                                onChangeName={'onChangeItem'}
+                                valueName={'selectedValue'}
+                                defaultValue='WAITING'
                             />
                         </View>
-                        <View style={styles.dataView}>
+                        <View style={styles.dataView2}>
                             <Text style={styles.dataText}>ランク</Text>
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(rank) => onChangeData('rank', rank)}
+                            <Controller
+                                control={control}
+                                render={({ onChange, onBlur, value }) => {
+                                    return(
+                                        <DropDownModal 
+                                            onPress={v => onChange(v)}
+                                            initialValue={value}
+                                            dropDownOptions={
+                                                [
+                                                    {label:'A', value:'A'},
+                                                    {label:'B', value:'B'},
+                                                    {label:'C', value:'C'},
+                                                ]
+                                            }
+                                        />
+                                    )
+                                }}
+                                name='rank' 
+                                onChangeName={'onChangeItem'}
+                                // valueName={'selectedValue'}
+                                defaultValue='A'
                             />
                         </View>
                     </View>
                     <View style={styles.flexView}>
-                        <View style={styles.dataView}>
-                            <Text style={styles.dataText}>季節</Text>
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(season) => onChangeMultiData('season', season, 0)}
-                            />
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(season) => onChangeMultiData('season', season, 1)}
-                            />
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(season) => onChangeMultiData('season', season, 2)}
-                            />
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(season) => onChangeMultiData('season', season, 3)}
-                            />
-                        </View>
                         <View style={styles.dataView}>
                             <Text style={styles.dataText}>ブランド</Text>
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(brand) => onChangeData('brand', brand)}
+                            <Controller
+                                control={control}
+                                render={({ onChange, onBlur, value }) => {
+                                    return(
+                                        <TextInput
+                                            style={styles.dataInput}
+                                            onChangeText={(data) => onChange(data)}
+                                            multiline={true}
+                                        />
+                                    )
+                                }}
+                                name='brandName'
+                                defaultValue={'no brand'}
                             />
                         </View>
                     </View>
                     <View style={styles.flexView}>
                         <View style={styles.dataView}>
                             <Text style={styles.dataText}>カラー</Text>
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(color) => onChangeMultiData('color', color, 0)}
-                            />
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(color) => onChangeMultiData('color', color, 1)}
-                            />
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(color) => onChangeMultiData('color', color, 2)}
+                            <Controller
+                                control={control}
+                                render={({ onChange, onBlur, value }) => {
+                                    return(
+                                        <TextInput
+                                            style={styles.dataInput}
+                                            onChangeText={(data) => onChange(data)}
+                                            multiline={true}
+                                        />
+                                    )
+                                }}
+                                name='color'
+                                defaultValue='sample'
                             />
                         </View>
                         <View style={styles.dataView}>
                             <Text style={styles.dataText}>素材</Text>
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(material) => onChangeMultiData('material', material, 0)}
+                            <Controller
+                                control={control}
+                                render={({ onChange, onBlur, value }) => {
+                                    return(
+                                        <TextInput
+                                            style={styles.dataInput}
+                                            onChangeText={(data) => onChange(data)}
+                                            multiline={true}
+                                        />
+                                    )
+                                }}
+                                name='material'
+                                defaultValue='sample'
                             />
                         </View>
                     </View>
-                    <View style={styles.flexView}>
-                        <View style={styles.dataView}>
-                            <Text style={styles.dataText}>大カテゴリ</Text>
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(bigCategory) => onChangeMultiData('bigCategory', bigCategory, 0)}
-                            />
-                        </View>
-                        <View style={styles.dataView}>
-                            <Text style={styles.dataText}>小カテゴリ</Text>
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(smallCategory) => onChangeMultiData('smallCategory', smallCategory, 0)}
-                            />
-                        </View>
-                    </View>
+                    <SeasonSelectForm
+                        style={styles}
+                        formProperties={formProperties}
+                        Controller={Controller}
+                    />
                     <View style={styles.flexView}>
                         <View style={styles.dataView}>
                             <Text style={styles.dataText}>サイズ</Text>
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(size) => onChangeData('size', size)}
+                            <Controller
+                                control={control}
+                                render={({ onChange, onBlur, value }) => {
+                                    return(
+                                        <TextInput
+                                            style={styles.dataInput}
+                                            onChangeText={(data) => onChange(data)}
+                                            multiline={true}
+                                        />
+                                    )
+                                }}
+                                name='size'
+                                defaultValue={'S'}
+                                rules={{required: true, pattern: /(S|M|L|XL)/}}
                             />
+                            <Text>{(errors.size?.type === 'pattern') && 'サイズは(S,M,L,XL)のうち一つです。'}</Text>
+                            <Text>{(errors.size?.type === 'required') && 'サイズは必須項目です。'}</Text>
                         </View>
                         <View style={styles.dataView}>
                             <Text style={styles.dataText}>仕入れ先</Text>
@@ -247,93 +329,75 @@ export const CreateTab = () => {
                             />
                         </View>
                     </View>
-                    <Text style={styles.topsText}>トップス</Text>
                     <View style={styles.flexView}>
-                        <View style={styles.dataView}>
-                            <Text style={styles.dataText}>着丈</Text>
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(dressLength) => onChangeData('dressLength', dressLength)}
+                        <View style={styles.dataView2}>
+                            <Text style={styles.dataText}>大カテゴリ</Text>
+                            <Controller
+                                control={control}
+                                render={({ onChange, onBlur, value }) => {
+                                    return(
+                                        <DropDownModal 
+                                            onPress={v => {onChange(v);changeBigCategory(v)}}
+                                            initialValue={value}
+                                            dropDownOptions={
+                                                [
+                                                    {label:'トップス', value:'TOPS'},
+                                                    {label:'ボトムス', value:'BOTTOMS'},
+                                                ]
+                                            }
+                                        />
+                                    )
+                                }}
+                                name='bigCategory' 
+                                onChangeName={'onPress'}
+                                // valueName={'selectedValue'}
+                                defaultValue='TOPS'
                             />
-                        </View>
-                        <View style={styles.dataView}>
-                            <Text style={styles.dataText}>身幅</Text>
+                            <Text style={styles.dataText}>小カテゴリ</Text>
                             <TextInput
                                 style={styles.dataInput}
-                                onChangeText={(dressWidth) => onChangeData('dressWidth', dressWidth)}
+                                onChangeText={(smallCategory) => onChangeMultiData('smallCategory', smallCategory, 0)}
                             />
                         </View>
                     </View>
-                    <View style={styles.flexView}>
-                        <View style={styles.dataView}>
-                            <Text style={styles.dataText}>袖丈</Text>
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(sleeveLength) => onChangeData('sleeveLength', sleeveLength)}
-                            />
-                        </View>
-                    </View>
-                    <Text style={styles.bottomText}>ボトムス</Text>
-                    <View style={styles.flexView}>
-                        <View style={styles.dataView}>
-                            <Text style={styles.dataText}>ウエスト</Text>
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(waist) => onChangeData('waist', waist)}
-                            />
-                        </View>
-                        <View style={styles.dataView}>
-                            <Text style={styles.dataText}>股上</Text>
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(rise) => onChangeData('rise', rise)}
-                            />
-                        </View>
-                    </View>
-                    <View style={styles.flexView}>
-                        <View style={styles.dataView}>
-                            <Text style={styles.dataText}>ヒップ</Text>
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(hip) => onChangeData('hip', hip)}
-                            />
-                        </View>
-                        <View style={styles.dataView}>
-                            <Text style={styles.dataText}>股下</Text>
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(inseam) => onChangeData('inseam', inseam)}
-                            />
-                        </View>
-                    </View>
-                    <View style={styles.flexView}>
-                        <View style={styles.dataView}>
-                            <Text style={styles.dataText}>裾幅</Text>
-                            <TextInput
-                                style={styles.dataInput}
-                                onChangeText={(hemWidth) => onChangeData('hemWidth', hemWidth)}
-                            />
-                        </View>
-                    </View>
+                    {bigCategory==='TOPS' && (<TopsForm style={styles} formProperties={formProperties} Controller={Controller}/>)}
+                    {bigCategory==='BOTTOMS' && (<BottomsForm style={styles} formProperties={formProperties} Controller={Controller}/>)}
+
+                    
                     <View style={styles.descriptionView}>
                         <Text style={styles.descriptionText}>アイテム説明</Text>
                         <TextInput
                             style={styles.descriptionInput}
-                            onChangeText={(description) => onChangeData('description', description)}
+                            // onChangeText={(description) => onChange(description)}
                             multiline={true}
                         />
                     </View>
                     <View style={styles.descriptionView}>
                         <Text style={styles.descriptionText}>アイテム状態説明</Text>
-                        <TextInput
-                            style={styles.descriptionInput}
-                            onChangeText={(stateDescription) => onChangeData('stateDescription', stateDescription)}
-                            multiline={true}
-                        />
+                        <Controller
+                                control={control}
+                                render={({ onChange, onBlur, value }) => {
+                                    return(
+                                        <TextInput
+                                            // style={styles.dataInput}
+                                            onChangeText={(data) => onChange(data)}
+                                            multiline={true}
+                                            onBlur={()=>{onBlur()}}
+                                            // error={errors.item_state_expression}
+                                            // errorText={errors?.item_state_expression?.message}
+                                        />
+                                        )
+                                }}
+                                name='item_state_expression'
+                                rules={{required: true ,minLength:5}}
+                                defaultValue='test'
+                            />
+                            <Text>{(errors.item_state_expression?.type === "minLength") && 'Your input is required'}</Text>
                     </View>
                     <Button
                         title='作成'
-                        onPress={createItem}
+                        // onPress={handleSubmit((value) => {console.log(errors)})}
+                        onPress={()=> {trigger();handleSubmit(onSubmit);console.log('errors',errors)}}
                     />
                     <View style={{ height: hp('30%') }}></View>
                 </ScrollView>
@@ -363,7 +427,15 @@ const styles = StyleSheet.create({
     dataView: {
         width: wp('40%'),
         marginLeft: wp('5%'),
-        marginTop: hp('3%')
+        marginTop: hp('3%'),
+        zIndex: 1
+    },
+    dataView2: {
+        width: wp('40%'),
+        marginLeft: wp('5%'),
+        marginTop: hp('3%'),
+        zIndex:5000
+        // marginBottom: hp('10%')
     },
     dataText: {
         fontSize: 13,
