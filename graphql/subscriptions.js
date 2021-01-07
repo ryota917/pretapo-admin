@@ -865,3 +865,102 @@ export const onDeleteItemFavorite = /* GraphQL */ `
     }
   }
 `;
+export const onCreateSupplierIndex = /* GraphQL */ `
+  subscription OnCreateSupplierIndex {
+    onCreateSupplierIndex {
+      id
+      name
+      index
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateSupplierIndex = /* GraphQL */ `
+  subscription OnUpdateSupplierIndex {
+    onUpdateSupplierIndex {
+      id
+      name
+      index
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteSupplierIndex = /* GraphQL */ `
+  subscription OnDeleteSupplierIndex {
+    onDeleteSupplierIndex {
+      id
+      name
+      index
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateColorMap = /* GraphQL */ `
+  subscription OnCreateColorMap {
+    onCreateColorMap {
+      id
+      name
+      value
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateColorMap = /* GraphQL */ `
+  subscription OnUpdateColorMap {
+    onUpdateColorMap {
+      id
+      name
+      value
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteColorMap = /* GraphQL */ `
+  subscription OnDeleteColorMap {
+    onDeleteColorMap {
+      id
+      name
+      value
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateCategoryMap = /* GraphQL */ `
+  subscription OnCreateCategoryMap {
+    onCreateCategoryMap {
+      id
+      name
+      value
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateCategoryMap = /* GraphQL */ `
+  subscription OnUpdateCategoryMap {
+    onUpdateCategoryMap {
+      id
+      name
+      value
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteCategoryMap = /* GraphQL */ `
+  subscription OnDeleteCategoryMap {
+    onDeleteCategoryMap {
+      id
+      name
+      value
+      createdAt
+      updatedAt
+    }
+  }
+`;

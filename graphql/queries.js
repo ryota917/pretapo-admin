@@ -462,6 +462,93 @@ export const listItemFavorites = /* GraphQL */ `
     }
   }
 `;
+export const getSupplierIndex = /* GraphQL */ `
+  query GetSupplierIndex($id: ID!) {
+    getSupplierIndex(id: $id) {
+      id
+      name
+      index
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listSupplierIndexs = /* GraphQL */ `
+  query ListSupplierIndexs(
+    $filter: ModelSupplierIndexFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listSupplierIndexs(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        index
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getColorMap = /* GraphQL */ `
+  query GetColorMap($id: ID!) {
+    getColorMap(id: $id) {
+      id
+      name
+      value
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listColorMaps = /* GraphQL */ `
+  query ListColorMaps(
+    $filter: ModelColorMapFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listColorMaps(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        value
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getCategoryMap = /* GraphQL */ `
+  query GetCategoryMap($id: ID!) {
+    getCategoryMap(id: $id) {
+      id
+      name
+      value
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listCategoryMaps = /* GraphQL */ `
+  query ListCategoryMaps(
+    $filter: ModelCategoryMapFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listCategoryMaps(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        value
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const searchItems = /* GraphQL */ `
   query SearchItems(
     $filter: SearchableItemFilterInput
@@ -624,6 +711,56 @@ export const searchItemFavorites = /* GraphQL */ `
         id
         itemId
         userId
+        createdAt
+        updatedAt
+      }
+      nextToken
+      total
+    }
+  }
+`;
+export const searchSupplierIndexs = /* GraphQL */ `
+  query SearchSupplierIndexs(
+    $filter: SearchableSupplierIndexFilterInput
+    $sort: SearchableSupplierIndexSortInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    searchSupplierIndexs(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        name
+        index
+        createdAt
+        updatedAt
+      }
+      nextToken
+      total
+    }
+  }
+`;
+export const searchColorMaps = /* GraphQL */ `
+  query SearchColorMaps(
+    $filter: SearchableColorMapFilterInput
+    $sort: SearchableColorMapSortInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    searchColorMaps(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        name
+        value
         createdAt
         updatedAt
       }
