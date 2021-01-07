@@ -937,3 +937,129 @@ export const deleteItemFavorite = /* GraphQL */ `
     }
   }
 `;
+export const createSupplierIndex = /* GraphQL */ `
+  mutation CreateSupplierIndex(
+    $input: CreateSupplierIndexInput!
+    $condition: ModelSupplierIndexConditionInput
+  ) {
+    createSupplierIndex(input: $input, condition: $condition) {
+      id
+      name
+      index
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateSupplierIndex = /* GraphQL */ `
+  mutation UpdateSupplierIndex(
+    $input: UpdateSupplierIndexInput!
+    $condition: ModelSupplierIndexConditionInput
+  ) {
+    updateSupplierIndex(input: $input, condition: $condition) {
+      id
+      name
+      index
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteSupplierIndex = /* GraphQL */ `
+  mutation DeleteSupplierIndex(
+    $input: DeleteSupplierIndexInput!
+    $condition: ModelSupplierIndexConditionInput
+  ) {
+    deleteSupplierIndex(input: $input, condition: $condition) {
+      id
+      name
+      index
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createColorMap = /* GraphQL */ `
+  mutation CreateColorMap(
+    $input: CreateColorMapInput!
+    $condition: ModelColorMapConditionInput
+  ) {
+    createColorMap(input: $input, condition: $condition) {
+      id
+      name
+      value
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateColorMap = /* GraphQL */ `
+  mutation UpdateColorMap(
+    $input: UpdateColorMapInput!
+    $condition: ModelColorMapConditionInput
+  ) {
+    updateColorMap(input: $input, condition: $condition) {
+      id
+      name
+      value
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteColorMap = /* GraphQL */ `
+  mutation DeleteColorMap(
+    $input: DeleteColorMapInput!
+    $condition: ModelColorMapConditionInput
+  ) {
+    deleteColorMap(input: $input, condition: $condition) {
+      id
+      name
+      value
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createCategoryMap = /* GraphQL */ `
+  mutation CreateCategoryMap(
+    $input: CreateCategoryMapInput!
+    $condition: ModelCategoryMapConditionInput
+  ) {
+    createCategoryMap(input: $input, condition: $condition) {
+      id
+      name
+      value
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateCategoryMap = /* GraphQL */ `
+  mutation UpdateCategoryMap(
+    $input: UpdateCategoryMapInput!
+    $condition: ModelCategoryMapConditionInput
+  ) {
+    updateCategoryMap(input: $input, condition: $condition) {
+      id
+      name
+      value
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteCategoryMap = /* GraphQL */ `
+  mutation DeleteCategoryMap(
+    $input: DeleteCategoryMapInput!
+    $condition: ModelCategoryMapConditionInput
+  ) {
+    deleteCategoryMap(input: $input, condition: $condition) {
+      id
+      name
+      value
+      createdAt
+      updatedAt
+    }
+  }
+`;
