@@ -10,6 +10,7 @@ import TopsForm from './Forms/TopsForm'
 import BottomsForm from './Forms/BottomsForm'
 import DropDownModal from './Forms/DropDown'
 import SeasonSelectForm from './Forms/SeasonSelectForm'
+import {generateItemId} from '../../utils/generateItemId'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { FlatList } from 'react-native-gesture-handler';
 
@@ -124,12 +125,36 @@ export const CreateTab = () => {
         getValues: getValues
     }
     const onError = (errors, e) => console.log('error',errors);
-    const onSubmit = (formData, e) => {
+    const temp = async () =>{
+        const data = {
+            id: '2000',
+            name: 'Pretapo',
+            index: 1,
+        }
+        const res = await API.graphql(
+            {
+                query: gqlMutations.createSupplierIndex,
+                variables: {
+                    input: data
+                    
+                }
+            }
+        )
+        console.log(res)
+    }
+    const onSubmit = async (formData, e) => {
         const itemData = {
             ...formData,
         };
         console.log('itemdata',itemData)
-        
+        const itemId = await generateItemId(
+            'Pretapo',
+            itemData['color'],
+            itemData['size'],
+            itemData['bigCategory']
+        )
+
+        console.log(itemId)
     }
 
     return(
@@ -424,6 +449,7 @@ export const CreateTab = () => {
                         type='submit'
                         // onPress={handleSubmit((value) => {console.log(errors)})}
                         onPress={(handleSubmit(onSubmit, onError))}
+                        // onPress={temp}
                     />
                     <View style={{ height: hp('30%') }}></View>
                 </ScrollView>

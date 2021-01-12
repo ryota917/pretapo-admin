@@ -3,25 +3,25 @@ import * as gqlQueries from '../graphql/queries' // read
 import { API, graphqlOperation } from 'aws-amplify';
 
 const colorMap = {
-    red: 30
+    RED: 30
 }
 const categoryIndex = {
     BOTTOMS: 2000,
     TOPS: 1000,
 }
 
-export const generateItemId = (
+export const generateItemId = async (
     shopName,
     itemMainColor,
     itemSize,
     itemBigCategory
 ) => {
-    const shopInfo = getShopInfo(shopName);
+    const shopInfo = await getShopInfo(shopName);
     const { shopId, itemIndex } = shopInfo;
     const itemColorId = getItemColorId(itemMainColor);
     const itemCategoryId = getItemCategoryId(itemBigCategory);
-    updateShopIndex(shopId, itemIndex);
-    return `${itemCategoryId}-${shopId}-${itemIndex}-${itemSize}-${itemColorId}`
+    updateShopIndex(shopId, itemIndex + 1);
+    return `${itemCategoryId}-${shopId}-${itemIndex}-${itemSize}${itemColorId}`
 }
 
 const getShopInfo = async shopName => {
@@ -32,10 +32,9 @@ const getShopInfo = async shopName => {
             }
         }
     }))
-    const shopInfo = res.data.searchSupplierIndexs.items[0]
     return {
-        shopId: shopInfo.id,
-        itemIndex: shopInfo.index
+        shopId: res.data.searchSupplierIndexs.items[0].id,
+        itemIndex: res.data.searchSupplierIndexs.items[0].index
     }
 }
 
@@ -44,12 +43,11 @@ const updateShopIndex = async (shopId, itemIndex) => {
         {
             query: gqlMutations.updateSupplierIndex,
             variables: {
-                input: {
+                input: 
                     {
                         id: shopId,
                         index: itemIndex,
                     }
-                }
             }
         }
     )
@@ -61,5 +59,6 @@ const getItemColorId = itemMainColor => {
 }
 
 const getItemCategoryId = itemBigCategory => {
+    
     return categoryIndex[itemBigCategory]
 }
